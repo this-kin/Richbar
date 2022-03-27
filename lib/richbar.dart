@@ -3,7 +3,7 @@ library richflushbar;
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:richflushbar/richflushbar_route.dart' as route;
+import 'package:richflushbar/richbar_route.dart' as route;
 
 typedef RichbarStatusCallback = void Function(RichbarStatus? richbarStatus);
 typedef OnTap = void Function(Richbar richbar);
@@ -137,3 +137,6 @@ enum RichbarPosition { top, bottom }
 enum RichbarDimissibleDirection { vertical, horizontal }
 enum RicharStyle { grounded, floating }
 enum RichbarStatus { showing, init, dismissed, hidden }
+
+
+final Rich

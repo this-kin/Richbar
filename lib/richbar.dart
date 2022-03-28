@@ -3,7 +3,8 @@ library richflushbar;
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:richflushbar/richbar_route.dart' as route;
+import 'package:flutter/scheduler.dart';
+import 'package:richflushbar/richbar_route.dart' as routes;
 
 typedef RichbarStatusCallback = void Function(RichbarStatus? richbarStatus);
 typedef OnTap = void Function(Richbar richbar);
@@ -87,10 +88,9 @@ class Richbar<T> extends StatefulWidget {
   /// whether user can interact with screen when bar is displaying
   final bool enableBackgroundInteraction;
 
-  ///
-  final Offset offset;
+  routes.RichbarRoute<T?>? richbarRoute;
 
-  const Richbar({
+  Richbar({
     Key? key,
     this.onStatusChanged,
     this.message,
@@ -118,17 +118,164 @@ class Richbar<T> extends StatefulWidget {
     this.dismissCurve = Curves.easeIn,
     this.blur = 0.5,
     this.enableBackgroundInteraction = false,
-    this.offset = const Offset(0, 0),
-  }) : super(key: key);
+    this.richbarRoute,
+    // ignore: prefer_initializing_formals
+  }); //: onStatusChanged = onStatusChanged,
+  //       super(key: key) {
+  //  // onStatusChanged = onStatusChanged ?? (status) {};
+  // }
+
+  Future<T?> show(BuildContext context) async {
+    richbarRoute = routes.showRichbar<T>(
+      context: context,
+      richbar: this,
+    ) as routes.RichbarRoute<T?>;
+
+    return await Navigator.of(context, rootNavigator: false)
+        .push(richbarRoute as Route<T>);
+  }
+
+  Future<T?> dismiss([T? result]) async {
+    // If route was never initialized, do nothing
+    if (richbarRoute == null) {
+      return null;
+    }
+
+    if (richbarRoute!.isCurrent) {
+      richbarRoute!.navigator!.pop(result);
+      return richbarRoute!.completed;
+    } else if (richbarRoute!.isActive) {
+      // removeRoute is called every time you dismiss a Flushbar that is not the top route.
+      // It will not animate back and listeners will not detect FlushbarStatus.IS_HIDING or FlushbarStatus.DISMISSED
+      // To avoid this, always make sure that Flushbar is the top route when it is being dismissed
+      richbarRoute!.navigator!.removeRoute(richbarRoute!);
+    }
+    return null;
+  }
+
+  bool showing() {
+    if (richbarRoute == null) {
+      return false;
+    }
+    // ignore: unrelated_type_equality_checks
+    return richbarRoute!.isCurrent == RichbarStatus.showing;
+  }
+
+  bool dismissed() {
+    if (richbarRoute == null) {
+      return false;
+    }
+    // ignore: unrelated_type_equality_checks
+    return richbarRoute!.isCurrent == RichbarStatus.dismissed;
+  }
+
+  bool init() {
+    if (richbarRoute == null) {
+      return false;
+    }
+    // ignore: unrelated_type_equality_checks
+    return richbarRoute!.isCurrent == RichbarStatus.init;
+  }
+
+  bool hidden() {
+    if (richbarRoute == null) {
+      return false;
+    }
+    // ignore: unrelated_type_equality_checks
+    return richbarRoute!.isCurrent == RichbarStatus.hidden;
+  }
 
   @override
   State<Richbar> createState() => _RichbarState();
 }
 
-class _RichbarState extends State<Richbar> {
+class _RichbarState<K extends Object?> extends State<Richbar<K>>
+    with TickerProviderStateMixin {
+  final Duration _pulseAnimationDuration = const Duration(seconds: 1);
+  final Widget _emptyWidget = const SizedBox();
+  final double _initialOpacity = 1.0;
+  final double _finalOpacity = 0.4;
+
+  GlobalKey? _backgroundBoxKey;
+  RichbarStatus? richbarStatus;
+  AnimationController? _fadeController;
+  late Animation<double> _fadeAnimation;
+  late bool _isTitlePresent;
+  late double _messageTopMargin;
+  late FocusAttachment _focusAttachment;
+  late Completer<Size> _boxHeightCompleter;
+
+  CurvedAnimation? _progressAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _backgroundBoxKey = GlobalKey();
+    _boxHeightCompleter = Completer<Size>();
+
+    _isTitlePresent = (widget.message != null || widget.messageText != null);
+    _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
+
+    _configureLeftBarFuture();
+  }
+
+  void _configureLeftBarFuture() {
+    SchedulerBinding.instance!.addPostFrameCallback(
+      (_) {
+        final keyContext = _backgroundBoxKey!.currentContext;
+
+        if (keyContext != null) {
+          final box = keyContext.findRenderObject() as RenderBox;
+          _boxHeightCompleter.complete(box.size);
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Align(
+      heightFactor: 1.0,
+      child: Material(
+        color: widget.richbarStyle == RicharStyle.floating
+            ? Colors.transparent
+            : widget.backgroundColor,
+        child: SafeArea(
+          minimum: widget.richbarPosition == RichbarPosition.bottom
+              ? EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom)
+              : EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top),
+          bottom: widget.richbarPosition == RichbarPosition.bottom,
+          top: widget.richbarPosition == RichbarPosition.top,
+          left: false,
+          right: false,
+          child: Stack(
+            children: [
+              FutureBuilder(
+                future: _boxHeightCompleter.future,
+                builder: (context, AsyncSnapshot<Size> snapshot) {
+                  return snapshot.hasData
+                      ? BackdropFilter(
+                          filter: ImageFilter.blur(
+                              sigmaX: widget.blur, sigmaY: widget.blur),
+                          child: Container(
+                            height: snapshot.data!.height,
+                            width: snapshot.data!.width,
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        )
+                      : _emptyWidget;
+                },
+              )
+              //   richbar,
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

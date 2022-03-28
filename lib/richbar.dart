@@ -137,6 +137,3 @@ enum RichbarPosition { top, bottom }
 enum RichbarDimissibleDirection { vertical, horizontal }
 enum RicharStyle { grounded, floating }
 enum RichbarStatus { showing, init, dismissed, hidden }
-
-
-final Rich

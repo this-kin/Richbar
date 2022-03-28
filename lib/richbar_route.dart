@@ -8,7 +8,15 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   final Builder builder;
   final Completer<T> completer = Completer<T>();
   final RichbarStatusCallback? onStatusChanged;
-  
+
+  RichbarRoute(
+    this.richbar,
+    this.builder,
+    this.onStatusChanged,
+  );
+
   @override
-  Iterable<OverlayEntry> createOverlayEntries() {}
+  Iterable<OverlayEntry> createOverlayEntries() {
+    throw UnimplementedError();
+  }
 }

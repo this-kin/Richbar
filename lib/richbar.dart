@@ -105,7 +105,7 @@ class Richbar<T> extends StatefulWidget {
     this.actionColor,
     this.onTap,
     this.duration,
-    this.isDismissible,
+    this.isDismissible = false,
     this.maxWidth,
     this.margin = const EdgeInsets.symmetric(),
     this.padding = const EdgeInsets.all(24),
@@ -268,7 +268,11 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                             ),
                           ),
                         )
-                      : _emptyWidget;
+                      : Container(
+                          height: 50,
+                          width: double.infinity,
+                          color: Colors.redAccent,
+                        );
                 },
               )
               //   richbar,

@@ -206,10 +206,6 @@ class RichbarRoute<T> extends OverlayRoute<T> {
     );
   }
 
-  @override
-  bool get finishedPopped =>
-      _animationController!.status == AnimationStatus.dismissed;
-
   Animation<Alignment>? get animation => _animation;
   Animation<Alignment>? _animation;
 
@@ -242,6 +238,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<double>? createBlurFilterAnimation() {
+    // ignore: unnecessary_null_comparison
     if (richbar.blur == null) return null;
     return Tween(begin: 0.0, end: richbar.blur).animate(
       CurvedAnimation(
@@ -426,6 +423,6 @@ RichbarRoute showRichbar<T>(
     {required BuildContext context, required Richbar richbar}) {
   return RichbarRoute<T>(
     richbar: richbar,
-    routeSettings: const RouteSettings(name: RICHFLUSHBAR_ROUTE),
+    routeSettings: const RouteSettings(name: richbarroute),
   );
 }

@@ -92,7 +92,6 @@ class Richbar<T> extends StatefulWidget {
 
   Richbar({
     Key? key,
-    this.onStatusChanged,
     this.message,
     this.messageSize,
     this.messageWeight = FontWeight.w400,
@@ -118,12 +117,13 @@ class Richbar<T> extends StatefulWidget {
     this.dismissCurve = Curves.easeIn,
     this.blur = 0.5,
     this.enableBackgroundInteraction = false,
+    RichbarStatusCallback? onStatusChanged,
     this.richbarRoute,
     // ignore: prefer_initializing_formals
-  }); //: onStatusChanged = onStatusChanged,
-  //       super(key: key) {
-  //  // onStatusChanged = onStatusChanged ?? (status) {};
-  // }
+  })  : onStatusChanged = onStatusChanged,
+        super(key: key) {
+    onStatusChanged = onStatusChanged ?? (status) {};
+  }
 
   Future<T?> show(BuildContext context) async {
     richbarRoute = routes.showRichbar<T>(
@@ -216,7 +216,6 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
 
     _isTitlePresent = (widget.message != null || widget.messageText != null);
     _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
-
     _configureLeftBarFuture();
   }
 
@@ -258,7 +257,9 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                   return snapshot.hasData
                       ? BackdropFilter(
                           filter: ImageFilter.blur(
-                              sigmaX: widget.blur, sigmaY: widget.blur),
+                            sigmaX: widget.blur,
+                            sigmaY: widget.blur,
+                          ),
                           child: Container(
                             height: snapshot.data!.height,
                             width: snapshot.data!.width,

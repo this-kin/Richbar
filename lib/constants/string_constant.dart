@@ -1,1 +1,1 @@
-const String RICHFLUSHBAR_ROUTE = "/richbar_route";
+const String richbarroute = "/richbar_route";

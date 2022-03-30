@@ -26,7 +26,9 @@ class RichbarRoute<T> extends OverlayRoute<T> {
     RouteSettings? routeSettings,
   })  : builder = Builder(builder: (BuildContext context) {
           return GestureDetector(
-            onTap: richbar.onTap != null ? () => richbar.onTap!(richbar) : null,
+            onTap: richbar.onPanDown != null
+                ? () => richbar.onPanDown!(richbar)
+                : null,
             child: richbar,
           );
         }),

@@ -14,31 +14,28 @@ class Richbar<T> extends StatefulWidget {
   final RichbarStatusCallback? onStatusChanged;
 
   /// The message to be displayed to the user
-  final String? message;
+  final String? title;
 
   /// message text size
-  final double? messageSize;
+  final double? titleFontSize;
 
   /// message text weight default will be normal w400
-  final FontWeight messageWeight;
+  final FontWeight titleFontWeight;
 
   /// message text color default color will be white
-  final Color? messageColor;
-
-  /// replaces the message
-  final Widget? messageText;
+  final Color? titleTextColor;
 
   /// action text to be displayed to the user default text will be dismissed
-  final String? actionText;
+  final String? text;
 
   /// action text size
-  final double? actionTextSize;
+  final double? textFontSize;
 
   /// action text color
-  final Color? actionTextColor;
+  final Color? textColor;
 
   /// action text font weight will be bold w700-800
-  final FontWeight? actionTextWeight;
+  final FontWeight? textFontWeight;
 
   /// Widget tray background color default color will be purple
   final Color? backgroundColor;
@@ -46,8 +43,14 @@ class Richbar<T> extends StatefulWidget {
   /// action button color
   final Color? actionColor;
 
-  /// a callback function that registers user's click
-  final OnTap? onTap;
+  /// a callback function that registers when user clikcs the widget / tray
+  final OnTap? onPanDown;
+
+  ///
+  final bool? showPulse;
+
+  // a callback functiom that registers when user clicks the button
+  final VoidCallback? onPressed;
 
   /// time frame for the whole thing to come up and display and hide
   final Duration? duration;
@@ -92,29 +95,30 @@ class Richbar<T> extends StatefulWidget {
 
   Richbar({
     Key? key,
-    this.message,
-    this.messageSize,
-    this.messageWeight = FontWeight.w400,
-    this.messageColor = Colors.white,
-    this.messageText,
-    this.actionText = "Dismiss",
-    this.actionTextSize,
-    this.actionTextColor,
-    this.actionTextWeight,
+    this.title,
+    this.titleFontSize,
+    this.titleFontWeight = FontWeight.w400,
+    this.titleTextColor = Colors.white,
+    this.text = "Dismiss",
+    this.textFontSize,
+    this.showPulse = true,
+    this.textColor,
+    this.onPressed,
+    this.textFontWeight,
     this.backgroundColor = const Color(0xFF753FF6),
     this.actionColor,
-    this.onTap,
+    this.onPanDown,
     this.duration,
     this.isDismissible = false,
     this.maxWidth,
     this.margin = const EdgeInsets.symmetric(),
-    this.padding = const EdgeInsets.all(24),
+    this.padding = const EdgeInsets.all(15),
     this.borderRadius,
     this.richbarPosition = RichbarPosition.top,
     this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
     this.richbarStyle = RicharStyle.floating,
-    this.showCurve = Curves.easeIn,
-    this.dismissCurve = Curves.easeIn,
+    this.showCurve = Curves.easeOutCirc,
+    this.dismissCurve = Curves.easeOutCirc,
     this.blur = 0.5,
     this.enableBackgroundInteraction = false,
     RichbarStatusCallback? onStatusChanged,
@@ -192,49 +196,65 @@ class Richbar<T> extends StatefulWidget {
 class _RichbarState<K extends Object?> extends State<Richbar<K>>
     with TickerProviderStateMixin {
   final Duration _pulseAnimationDuration = const Duration(seconds: 1);
-  final Widget _emptyWidget = const SizedBox();
   final double _initialOpacity = 1.0;
   final double _finalOpacity = 0.4;
 
-  GlobalKey? _backgroundBoxKey;
   RichbarStatus? richbarStatus;
   AnimationController? _fadeController;
   late Animation<double> _fadeAnimation;
   late bool _isTitlePresent;
-  late double _messageTopMargin;
-  late FocusAttachment _focusAttachment;
+
   late Completer<Size> _boxHeightCompleter;
-
-  CurvedAnimation? _progressAnimation;
-
+  late GlobalKey? _globalKey;
   @override
   void initState() {
     super.initState();
-
-    _backgroundBoxKey = GlobalKey();
+    _globalKey = GlobalKey();
     _boxHeightCompleter = Completer<Size>();
-
-    _isTitlePresent = (widget.message != null || widget.messageText != null);
-    _messageTopMargin = _isTitlePresent ? 6.0 : widget.padding.top;
-    _configureLeftBarFuture();
+    _isTitlePresent = (widget.title != null);
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      getCompleterSize();
+    });
+    if (widget.showPulse!) {
+      _configurePulseAnimation();
+    }
   }
 
-  void _configureLeftBarFuture() {
-    SchedulerBinding.instance!.addPostFrameCallback(
-      (_) {
-        final keyContext = _backgroundBoxKey!.currentContext;
+  void getCompleterSize() {
+    final box = _globalKey!.currentContext;
+    final size = box!.size;
+    _boxHeightCompleter.complete(size);
+  }
 
-        if (keyContext != null) {
-          final box = keyContext.findRenderObject() as RenderBox;
-          _boxHeightCompleter.complete(box.size);
-        }
-      },
+  void _configurePulseAnimation() {
+    _fadeController =
+        AnimationController(vsync: this, duration: _pulseAnimationDuration);
+    _fadeAnimation = Tween(begin: _initialOpacity, end: _finalOpacity).animate(
+      CurvedAnimation(
+        parent: _fadeController!,
+        curve: Curves.linear,
+      ),
     );
+
+    _fadeController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _fadeController!.reverse();
+      }
+      if (status == AnimationStatus.dismissed) {
+        _fadeController!.forward();
+      }
+    });
+
+    _fadeController!.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    final mediaquery = MediaQuery.of(context).viewInsets;
     return Align(
+      alignment: widget.richbarPosition == RichbarPosition.top
+          ? Alignment.topCenter
+          : Alignment.bottomCenter,
       heightFactor: 1.0,
       child: Material(
         color: widget.richbarStyle == RicharStyle.floating
@@ -242,45 +262,126 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
             : widget.backgroundColor,
         child: SafeArea(
           minimum: widget.richbarPosition == RichbarPosition.bottom
-              ? EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom)
-              : EdgeInsets.only(top: MediaQuery.of(context).viewInsets.top),
+              ? EdgeInsets.only(bottom: mediaquery.bottom)
+              : EdgeInsets.only(top: mediaquery.top),
           bottom: widget.richbarPosition == RichbarPosition.bottom,
-          top: widget.richbarPosition == RichbarPosition.top,
+          top: true,
           left: false,
           right: false,
-          child: Stack(
-            children: [
-              FutureBuilder(
-                future: _boxHeightCompleter.future,
-                builder: (context, AsyncSnapshot<Size> snapshot) {
-                  return snapshot.hasData
-                      ? BackdropFilter(
-                          filter: ImageFilter.blur(
-                            sigmaX: widget.blur,
-                            sigmaY: widget.blur,
-                          ),
-                          child: Container(
-                            height: snapshot.data!.height,
-                            width: snapshot.data!.width,
-                            decoration: const BoxDecoration(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                        )
-                      : Container(
-                          height: 50,
-                          width: double.infinity,
-                          color: Colors.redAccent,
-                        );
-                },
-              )
-              //   richbar,
-            ],
-          ),
+          child: _getRichar(),
         ),
       ),
     );
+  }
+
+  Widget _getRichar() {
+    Widget richbar = richbarWidget();
+    return Stack(
+      children: [
+        FutureBuilder(
+          future: _boxHeightCompleter.future,
+          builder: (context, AsyncSnapshot<Size> snapshot) {
+            return snapshot.hasData
+                ? BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: widget.blur,
+                      sigmaY: widget.blur,
+                    ),
+                    child: Container(
+                      height: snapshot.data!.height,
+                      width: snapshot.data!.width,
+                      decoration: const BoxDecoration(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                  )
+                : _emptyWidget();
+          },
+        ),
+        richbar,
+      ],
+    );
+  }
+
+  Widget richbarWidget() {
+    return Container(
+      key: _globalKey,
+      height: 130,
+      constraints: widget.maxWidth != null
+          ? BoxConstraints(maxWidth: widget.maxWidth!)
+          : null,
+      decoration: BoxDecoration(
+        color: widget.backgroundColor,
+      ),
+      padding: widget.padding,
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _isTitlePresent
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          top: widget.padding.top,
+                          bottom: widget.padding.bottom,
+                          left: widget.padding.left,
+                          right: widget.padding.right,
+                        ),
+                        child: Text(
+                          widget.title ?? "",
+                          style: TextStyle(
+                            fontSize: widget.titleFontSize ?? 14.0,
+                            color: widget.titleTextColor ?? Colors.white,
+                            fontWeight: widget.titleFontWeight,
+                          ),
+                        ),
+                      )
+                    : _emptyWidget(),
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius:
+                          widget.borderRadius ?? BorderRadius.circular(50),
+                    ),
+                    alignment: Alignment.center,
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: InkWell(
+                        onTap: widget.onPressed,
+                        borderRadius:
+                            widget.borderRadius ?? BorderRadius.circular(50),
+                        child: Center(
+                          heightFactor: 3.8,
+                          child: Text(
+                            widget.text!,
+                            style: TextStyle(
+                              color: widget.actionColor ?? Colors.white,
+                              fontWeight:
+                                  widget.textFontWeight ?? FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  SizedBox _emptyWidget() {
+    return const SizedBox();
   }
 }
 

@@ -56,10 +56,16 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
     await Richbar(
-      message: "Hello",
-      actionText: "Dismiss",
-      richbarStyle: RicharStyle.grounded,
+      title: "Hello there this is message",
+      text: "Dismiss",
+      richbarPosition: RichbarPosition.bottom,
       duration: const Duration(seconds: 5),
+      onPanDown: (v) {
+        print("Pan Down");
+      },
+      onPressed: () {
+        print("on Pressed");
+      },
       onStatusChanged: (status) {
         print(status);
       },

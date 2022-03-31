@@ -15,43 +15,6 @@ typedef OnTap = void Function(Richbar richbar);
 
 // ignore: must_be_immutable
 class Richbar<T> extends StatefulWidget {
-  Richbar({
-    Key? key,
-    this.title,
-    this.titleFontSize,
-    this.titleFontWeight = FontWeight.w400,
-    this.titleTextColor = defaultTextColor,
-    this.text = "Dismiss",
-    this.textFontSize,
-    this.showPulse = true,
-    this.textColor = defaultTextColor,
-    this.onPressed,
-    this.blockInteractionColor = Colors.transparent,
-    this.textFontWeight,
-    this.backgroundColor = defaultBackgroundColor,
-    this.actionColor,
-    this.onPanDown,
-    this.duration,
-    this.isDismissible = false,
-    this.maxWidth,
-    this.margin = const EdgeInsets.symmetric(),
-    this.padding = const EdgeInsets.all(15),
-    this.borderRadius,
-    this.richbarPosition = RichbarPosition.top,
-    this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
-    this.richbarStyle = RicharStyle.floating,
-    this.showCurve = Curves.easeOutCirc,
-    this.dismissCurve = Curves.easeOutCirc,
-    this.blur = 0.5,
-    this.enableBackgroundInteraction = false,
-    RichbarStatusCallback? onStatusChanged,
-    this.richbarRoute,
-    // ignore: prefer_initializing_formals
-  })  : onStatusChanged = onStatusChanged,
-        super(key: key) {
-    onStatusChanged = onStatusChanged ?? (status) {};
-  }
-
   /// to listen to richbar events
   final RichbarStatusCallback? onStatusChanged;
 
@@ -136,6 +99,43 @@ class Richbar<T> extends StatefulWidget {
   /// whether user can interact with screen when bar is displaying
   final bool enableBackgroundInteraction;
 
+  Richbar({
+    Key? key,
+    this.title,
+    this.titleFontSize,
+    this.titleFontWeight = FontWeight.w300,
+    this.titleTextColor = defaultTextColor,
+    this.text = "Dismiss",
+    this.textFontSize,
+    this.showPulse = true,
+    this.textColor = defaultTextColor,
+    this.onPressed,
+    this.blockInteractionColor = Colors.transparent,
+    this.textFontWeight,
+    this.backgroundColor = defaultBackgroundColor,
+    this.actionColor,
+    this.onPanDown,
+    this.duration,
+    this.isDismissible = false,
+    this.maxWidth,
+    this.margin = const EdgeInsets.symmetric(),
+    this.padding = const EdgeInsets.all(15),
+    this.borderRadius,
+    this.richbarPosition = RichbarPosition.top,
+    this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
+    this.richbarStyle = RicharStyle.floating,
+    this.showCurve = Curves.easeOutCirc,
+    this.dismissCurve = Curves.easeOutCirc,
+    this.blur = 0.5,
+    this.enableBackgroundInteraction = false,
+    RichbarStatusCallback? onStatusChanged,
+    this.richbarRoute,
+    // ignore: prefer_initializing_formals
+  })  : onStatusChanged = onStatusChanged,
+        super(key: key) {
+    onStatusChanged = onStatusChanged ?? (status) {};
+  }
+
   routes.RichbarRoute<T?>? richbarRoute;
 
   Future<T?> show(BuildContext context) async {
@@ -152,7 +152,6 @@ class Richbar<T> extends StatefulWidget {
     if (richbarRoute == null) {
       return null;
     }
-
     if (richbarRoute!.isCurrent) {
       richbarRoute!.navigator!.pop(result);
       return richbarRoute!.completed;
@@ -226,6 +225,12 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
     if (widget.showPulse!) {
       _configurePulseAnimation();
     }
+  }
+
+  @override
+  void dispose() {
+    _fadeController?.dispose();
+    super.dispose();
   }
 
   void getCompleterSize() {
@@ -303,7 +308,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                       ),
                     ),
                   )
-                : _emptyWidget();
+                : const SizedBox();
           },
         ),
         richbar,
@@ -350,9 +355,10 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                           ),
                         ),
                       )
-                    : _emptyWidget(),
+                    : const SizedBox(),
                 Center(
                   child: Container(
+                    height: 50,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
                       borderRadius:
@@ -366,13 +372,15 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                         borderRadius:
                             widget.borderRadius ?? BorderRadius.circular(50),
                         child: Center(
-                          heightFactor: 3.8,
-                          child: Text(
-                            widget.text!,
-                            style: TextStyle(
-                              color: widget.actionColor ?? Colors.white,
-                              fontWeight:
-                                  widget.textFontWeight ?? FontWeight.bold,
+                          child: FittedBox(
+                            child: Text(
+                              widget.text!,
+                              style: TextStyle(
+                                fontSize: widget.textFontSize ?? 17,
+                                color: widget.actionColor ?? Colors.white,
+                                fontWeight:
+                                    widget.textFontWeight ?? FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -386,16 +394,6 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
         ],
       ),
     );
-  }
-
-  SizedBox _emptyWidget() {
-    return const SizedBox();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _fadeController?.dispose();
   }
 }
 

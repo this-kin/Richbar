@@ -56,9 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
     await Richbar(
-      title: "Hello there this is message",
+      title: "Please enter your password",
       text: "Dismiss",
-      isDismissible: true,
+      isDismissible: false,
       richbarPosition: RichbarPosition.top,
       duration: const Duration(seconds: 5),
       onPanDown: (v) {

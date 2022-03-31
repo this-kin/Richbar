@@ -1,16 +1,56 @@
-library richflushbar;
+library richbar;
 
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:richflushbar/constants/color_constant.dart';
 import 'package:richflushbar/richbar_route.dart' as routes;
 
+//
 typedef RichbarStatusCallback = void Function(RichbarStatus? richbarStatus);
+//
 typedef OnTap = void Function(Richbar richbar);
 
+// ignore: must_be_immutable
 class Richbar<T> extends StatefulWidget {
-  ///
+  Richbar({
+    Key? key,
+    this.title,
+    this.titleFontSize,
+    this.titleFontWeight = FontWeight.w400,
+    this.titleTextColor = defaultTextColor,
+    this.text = "Dismiss",
+    this.textFontSize,
+    this.showPulse = true,
+    this.textColor = defaultTextColor,
+    this.onPressed,
+    this.textFontWeight,
+    this.backgroundColor = defaultBackgroundColor,
+    this.actionColor,
+    this.onPanDown,
+    this.duration,
+    this.isDismissible = false,
+    this.maxWidth,
+    this.margin = const EdgeInsets.symmetric(),
+    this.padding = const EdgeInsets.all(15),
+    this.borderRadius,
+    this.richbarPosition = RichbarPosition.top,
+    this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
+    this.richbarStyle = RicharStyle.floating,
+    this.showCurve = Curves.easeOutCirc,
+    this.dismissCurve = Curves.easeOutCirc,
+    this.blur = 0.5,
+    this.enableBackgroundInteraction = false,
+    RichbarStatusCallback? onStatusChanged,
+    this.richbarRoute,
+    // ignore: prefer_initializing_formals
+  })  : onStatusChanged = onStatusChanged,
+        super(key: key) {
+    onStatusChanged = onStatusChanged ?? (status) {};
+  }
+
+  /// to listen to richbar events
   final RichbarStatusCallback? onStatusChanged;
 
   /// The message to be displayed to the user
@@ -46,7 +86,7 @@ class Richbar<T> extends StatefulWidget {
   /// a callback function that registers when user clikcs the widget / tray
   final OnTap? onPanDown;
 
-  ///
+  /// Slow down animation
   final bool? showPulse;
 
   // a callback functiom that registers when user clicks the button
@@ -55,7 +95,7 @@ class Richbar<T> extends StatefulWidget {
   /// time frame for the whole thing to come up and display and hide
   final Duration? duration;
 
-  /// whether user can dismiss while animating
+  /// whether user can dismiss the widget
   final bool? isDismissible;
 
   /// use to control the width of the bar especially on big screens
@@ -93,48 +133,11 @@ class Richbar<T> extends StatefulWidget {
 
   routes.RichbarRoute<T?>? richbarRoute;
 
-  Richbar({
-    Key? key,
-    this.title,
-    this.titleFontSize,
-    this.titleFontWeight = FontWeight.w400,
-    this.titleTextColor = Colors.white,
-    this.text = "Dismiss",
-    this.textFontSize,
-    this.showPulse = true,
-    this.textColor,
-    this.onPressed,
-    this.textFontWeight,
-    this.backgroundColor = const Color(0xFF753FF6),
-    this.actionColor,
-    this.onPanDown,
-    this.duration,
-    this.isDismissible = false,
-    this.maxWidth,
-    this.margin = const EdgeInsets.symmetric(),
-    this.padding = const EdgeInsets.all(15),
-    this.borderRadius,
-    this.richbarPosition = RichbarPosition.top,
-    this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
-    this.richbarStyle = RicharStyle.floating,
-    this.showCurve = Curves.easeOutCirc,
-    this.dismissCurve = Curves.easeOutCirc,
-    this.blur = 0.5,
-    this.enableBackgroundInteraction = false,
-    RichbarStatusCallback? onStatusChanged,
-    this.richbarRoute,
-    // ignore: prefer_initializing_formals
-  })  : onStatusChanged = onStatusChanged,
-        super(key: key) {
-    onStatusChanged = onStatusChanged ?? (status) {};
-  }
-
   Future<T?> show(BuildContext context) async {
     richbarRoute = routes.showRichbar<T>(
       context: context,
       richbar: this,
     ) as routes.RichbarRoute<T?>;
-
     return await Navigator.of(context, rootNavigator: false)
         .push(richbarRoute as Route<T>);
   }
@@ -383,6 +386,11 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   SizedBox _emptyWidget() {
     return const SizedBox();
   }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _fadeController?.dispose();
+  // }
 }
 
 ///

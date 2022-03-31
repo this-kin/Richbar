@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:richflushbar/constants/string_constant.dart';
@@ -47,8 +46,8 @@ class RichbarRoute<T> extends OverlayRoute<T> {
         }
       case RichbarPosition.bottom:
         {
-          _startAlignment = const Alignment(-1.0, -2.0);
-          _endAlignment = const Alignment(-1.0, -1.0);
+          _startAlignment = const Alignment(-1.0, 2.0);
+          _endAlignment = const Alignment(-1.0, 1.0);
           break;
         }
     }
@@ -227,10 +226,10 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<Alignment> createAnimation() {
-    assert(!completer.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
-    assert(_animationController != null);
-    return AlignmentTween(begin: _startAlignment, end: _endAlignment).animate(
+    return AlignmentTween(
+      begin: _startAlignment,
+      end: _endAlignment,
+    ).animate(
       CurvedAnimation(
         parent: _animationController!,
         curve: richbar.showCurve,

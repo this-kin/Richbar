@@ -58,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await Richbar(
       title: "Hello there this is message",
       text: "Dismiss",
+      isDismissible: true,
       richbarPosition: RichbarPosition.bottom,
       duration: const Duration(seconds: 5),
       onPanDown: (v) {

@@ -9,6 +9,7 @@ import 'package:richflushbar/richbar_route.dart' as routes;
 
 //
 typedef RichbarStatusCallback = void Function(RichbarStatus? richbarStatus);
+
 //
 typedef OnTap = void Function(Richbar richbar);
 

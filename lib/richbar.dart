@@ -26,6 +26,7 @@ class Richbar<T> extends StatefulWidget {
     this.showPulse = true,
     this.textColor = defaultTextColor,
     this.onPressed,
+    this.blockInteractionColor = Colors.transparent,
     this.textFontWeight,
     this.backgroundColor = defaultBackgroundColor,
     this.actionColor,
@@ -68,6 +69,9 @@ class Richbar<T> extends StatefulWidget {
 
   /// action text to be displayed to the user default text will be dismissed
   final String? text;
+
+  ///
+  final Color? blockInteractionColor;
 
   /// action text size
   final double? textFontSize;
@@ -387,11 +391,12 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   SizedBox _emptyWidget() {
     return const SizedBox();
   }
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _fadeController?.dispose();
-  // }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _fadeController?.dispose();
+  }
 }
 
 ///

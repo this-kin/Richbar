@@ -56,10 +56,10 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   Future<T> get completed => completer.future;
   bool get opaque => false;
 
-  // WILL POP
+  // Dismissble
   @override
   Future<RoutePopDisposition> willPop() {
-    if (richbar.isDismissible!) {
+    if (richbar.isDismissible! == false) {
       return Future.value(RoutePopDisposition.doNotPop);
     }
     return Future.value(RoutePopDisposition.pop);
@@ -67,10 +67,9 @@ class RichbarRoute<T> extends OverlayRoute<T> {
 
   @override
   Iterable<OverlayEntry> createOverlayEntries() {
-    final overlays = <OverlayEntry>[];
-
+    final entrys = <OverlayEntry>[];
     if (richbar.enableBackgroundInteraction) {
-      overlays.add(
+      entrys.add(
         OverlayEntry(
           builder: (BuildContext context) {
             return Listener(
@@ -83,28 +82,29 @@ class RichbarRoute<T> extends OverlayRoute<T> {
           opaque: opaque,
         ),
       );
+    } else {
+      entrys.add(
+        OverlayEntry(
+          builder: (BuildContext context) {
+            final Widget annotatedWidget = Semantics(
+              focused: false,
+              container: true,
+              explicitChildNodes: true,
+              child: AlignTransition(
+                alignment: _animation!,
+                child: richbar.isDismissible!
+                    ? dimissible(builder)
+                    : Container(margin: richbar.margin, child: builder),
+              ),
+            );
+            return annotatedWidget;
+          },
+          maintainState: false,
+          opaque: opaque,
+        ),
+      );
     }
-    overlays.add(
-      OverlayEntry(
-        builder: (BuildContext context) {
-          final Widget annotatedWidget = Semantics(
-            focused: false,
-            container: true,
-            explicitChildNodes: true,
-            child: AlignTransition(
-              alignment: _animation!,
-              child:
-                  richbar.isDismissible! ? dimissible(builder) : _getRichbar(),
-            ),
-          );
-          return annotatedWidget;
-        },
-        maintainState: false,
-        opaque: opaque,
-      ),
-    );
-
-    return overlays;
+    return entrys;
   }
 
   Widget _bgOverlay() {
@@ -114,7 +114,9 @@ class RichbarRoute<T> extends OverlayRoute<T> {
         builder: (context, child) {
           return BackdropFilter(
             filter: ImageFilter.blur(
-                sigmaX: _filterBlur!.value, sigmaY: _filterBlur!.value),
+              sigmaX: _filterBlur!.value,
+              sigmaY: _filterBlur!.value,
+            ),
             child: Container(
               constraints: const BoxConstraints.expand(),
               color: _filterColor!.value,
@@ -122,14 +124,15 @@ class RichbarRoute<T> extends OverlayRoute<T> {
           );
         },
       );
-    }
-    if (_filterBlur != null) {
+    } else if (_filterBlur != null) {
       return AnimatedBuilder(
         animation: _filterBlur!,
         builder: (context, child) {
           return BackdropFilter(
             filter: ImageFilter.blur(
-                sigmaX: _filterBlur!.value, sigmaY: _filterBlur!.value),
+              sigmaX: _filterBlur!.value,
+              sigmaY: _filterBlur!.value,
+            ),
             child: Container(
               constraints: const BoxConstraints.expand(),
               color: Colors.transparent,
@@ -137,9 +140,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
           );
         },
       );
-    }
-
-    if (_filterColor != null) {
+    } else if (_filterColor != null) {
       return AnimatedBuilder(
         animation: _filterColor!,
         builder: (builder, child) {
@@ -157,13 +158,15 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   }
 
   //
-  String customKey = "";
+  int customKey = 0;
 
-  dimissible(Widget child) {
+  Widget dimissible(Widget child) {
     return Dismissible(
-      key: Key(customKey),
-      child: _getRichbar(),
-      direction: _getDirection(),
+      key: Key(customKey.toString()),
+      direction: richbar.richbarDimissibleDirection ==
+              RichbarDimissibleDirection.horizontal
+          ? DismissDirection.horizontal
+          : DismissDirection.vertical,
       resizeDuration: null,
       confirmDismiss: (_) {
         if (richbarStatus == RichbarStatus.init ||
@@ -173,51 +176,30 @@ class RichbarRoute<T> extends OverlayRoute<T> {
         return Future.value(true);
       },
       onDismissed: (_) {
-        customKey += "1";
+        customKey += 1;
         _cancel();
         _isDismissible = true;
-
-        if (isCurrent) {
-          navigator!.pop();
-        } else {
-          navigator!.removeRoute(this);
-        }
+        isCurrent ? navigator!.pop() : navigator!.removeRoute(this);
       },
+      child: Container(margin: richbar.margin, child: builder),
     );
   }
 
-  DismissDirection _getDirection() {
-    if (richbar.richbarDimissibleDirection ==
-        RichbarDimissibleDirection.horizontal) {
-      return DismissDirection.horizontal;
-    } else {
-      if (richbar.richbarDimissibleDirection ==
-          RichbarDimissibleDirection.vertical) {
-        return DismissDirection.up;
-      } else {
-        return DismissDirection.down;
-      }
-    }
-  }
+  //
+  @override
+  bool get finishedWhenPopped =>
+      _animationController!.status == AnimationStatus.dismissed;
 
-  Widget _getRichbar() {
-    return Container(
-      margin: richbar.margin,
-      child: builder,
-    );
-  }
-
+  // GETTERS
   Animation<Alignment>? get animation => _animation;
   Animation<Alignment>? _animation;
 
+  // PROTECTED
   @protected
   AnimationController? get animationController => _animationController;
   AnimationController? _animationController;
 
   AnimationController createAnimationController() {
-    assert(!completer.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
-    assert(richbar.duration! >= Duration.zero);
     return AnimationController(
       duration: richbar.duration,
       debugLabel: debugLabel,
@@ -226,10 +208,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<Alignment> createAnimation() {
-    return AlignmentTween(
-      begin: _startAlignment,
-      end: _endAlignment,
-    ).animate(
+    return AlignmentTween(begin: _startAlignment, end: _endAlignment).animate(
       CurvedAnimation(
         parent: _animationController!,
         curve: richbar.showCurve,
@@ -254,8 +233,10 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   }
 
   Animation<Color?>? createColorFilterAnimation() {
-    if (richbar.backgroundColor == null) return null;
-    return ColorTween(begin: Colors.transparent, end: richbar.backgroundColor)
+    // ignore: unnecessary_null_comparison
+    if (richbar.blur == null) return null;
+    return ColorTween(
+            begin: Colors.transparent, end: richbar.blockInteractionColor)
         .animate(
       CurvedAnimation(
         parent: _animationController!,
@@ -274,26 +255,20 @@ class RichbarRoute<T> extends OverlayRoute<T> {
         richbarStatus = RichbarStatus.showing;
         if (onStatusChanged != null) onStatusChanged!(richbarStatus);
         if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = opaque;
-
         break;
       case AnimationStatus.forward:
         richbarStatus = RichbarStatus.init;
         if (onStatusChanged != null) onStatusChanged!(richbarStatus);
         break;
       case AnimationStatus.reverse:
-        richbarStatus = RichbarStatus.showing;
+        richbarStatus = RichbarStatus.hidden;
         if (onStatusChanged != null) onStatusChanged!(richbarStatus);
         if (overlayEntries.isNotEmpty) overlayEntries.first.opaque = false;
         break;
       case AnimationStatus.dismissed:
         assert(!overlayEntries.first.opaque);
-        // We might still be the current route if a subclass is controlling the
-        // the transition and hits the dismissed status. For example, the iOS
-        // back gesture drives this animation to the dismissed status before
-        // popping the navigator.
         richbarStatus = RichbarStatus.dismissed;
         if (onStatusChanged != null) onStatusChanged!(richbarStatus);
-
         if (!isCurrent) {
           navigator!.finalizeRoute(this);
           if (overlayEntries.isNotEmpty) {
@@ -308,63 +283,42 @@ class RichbarRoute<T> extends OverlayRoute<T> {
 
   @override
   void install() {
-    assert(!completer.isCompleted,
-        'Cannot install a $runtimeType after disposing it.');
+    super.install();
     _animationController = createAnimationController();
-    assert(_animationController != null,
-        '$runtimeType.createAnimationController() returned null.');
     _filterBlur = createBlurFilterAnimation();
     _filterColor = createColorFilterAnimation();
     _animation = createAnimation();
-    assert(_animation != null, '$runtimeType.createAnimation() returned null.');
-    super.install();
   }
 
   @override
   TickerFuture didPush() {
-    assert(_animationController != null,
-        '$runtimeType.didPush called before calling install() or after calling dispose().');
-    assert(!completer.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
+    super.didPush();
     _animation!.addStatusListener(_handleStatusChanged);
     _configureTimer();
-    super.didPush();
     return _animationController!.forward();
   }
 
   @override
   void didReplace(Route<dynamic>? oldRoute) {
-    assert(_animationController != null,
-        '$runtimeType.didReplace called before calling install() or after calling dispose().');
-    assert(!completer.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
+    super.didReplace(oldRoute);
     if (oldRoute is RichbarRoute) {
       _animationController!.value = oldRoute._animationController!.value;
     }
     _animation!.addStatusListener(_handleStatusChanged);
-    super.didReplace(oldRoute);
   }
 
   @override
   bool didPop(T? result) {
-    assert(_animationController != null,
-        '$runtimeType.didPop called before calling install() or after calling dispose().');
-    assert(!completer.isCompleted,
-        'Cannot reuse a $runtimeType after disposing it.');
-
     _result = result;
     _cancel();
-
     if (_isDismissible) {
       Timer(const Duration(milliseconds: 200), () {
         _animationController!.reset();
       });
-
-      _isDismissible = false;
+     _isDismissible = false;
     } else {
       _animationController!.reverse();
     }
-
     return super.didPop(result);
   }
 
@@ -392,25 +346,14 @@ class RichbarRoute<T> extends OverlayRoute<T> {
       _t!.cancel();
     }
   }
-
-  /// Whether this route can perform a transition to the given route.
-  ///
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
   bool canTransitionTo(RichbarRoute<dynamic> nextRoute) => true;
-
-  /// Whether this route can perform a transition from the given route.
-  ///
-  /// Subclasses can override this method to restrict the set of routes they
-  /// need to coordinate transitions with.
   bool canTransitionFrom(RichbarRoute<dynamic> previousRoute) => true;
-
   @override
   void dispose() {
-    assert(!completer.isCompleted, 'Cannot dispose a $runtimeType twice.');
+     super.dispose();
     _animationController?.dispose();
     completer.complete(_result);
-    super.dispose();
+   
   }
 
   /// A short description of this route useful for debugging.

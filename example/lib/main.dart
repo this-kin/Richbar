@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
       title: "Hello there this is message",
       text: "Dismiss",
       isDismissible: true,
-      richbarPosition: RichbarPosition.bottom,
+      richbarPosition: RichbarPosition.top,
       duration: const Duration(seconds: 5),
       onPanDown: (v) {
         print("Pan Down");

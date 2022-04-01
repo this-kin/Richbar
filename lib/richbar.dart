@@ -211,7 +211,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
 
   RichbarStatus? richbarStatus;
   AnimationController? _fadeController;
-  late Animation<double> _fadeAnimation;
+  late Animation<double> fadeAnimation;
   late bool _isTitlePresent;
 
   late Completer<Size> _boxHeightCompleter;
@@ -245,7 +245,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   void _configurePulseAnimation() {
     _fadeController =
         AnimationController(vsync: this, duration: _pulseAnimationDuration);
-    _fadeAnimation = Tween(begin: _initialOpacity, end: _finalOpacity).animate(
+    fadeAnimation = Tween(begin: _initialOpacity, end: _finalOpacity).animate(
       CurvedAnimation(
         parent: _fadeController!,
         curve: Curves.linear,

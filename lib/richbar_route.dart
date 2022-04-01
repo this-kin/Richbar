@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:richbar/constants/string_constant.dart';
 import 'package:richbar/richbar.dart';

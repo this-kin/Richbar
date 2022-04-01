@@ -379,10 +379,11 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                       child: InkWell(
                         onTap: widget.onPressed ??
                             () {
-                              if (richbarroute.isEmpty) {
+                              if (widget.richbarRoute!.isActive) {
                                 //
-                              } else {
                                 Navigator.pop(context);
+                              } else {
+                                //
                               }
                             },
                         borderRadius:

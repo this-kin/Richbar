@@ -5,6 +5,6 @@ richbarWidget(String? message, BuildContext context) {
   return RichbarHelper.showError(
     err: message,
     action: "Cancel",
-    
   )..show(context);
 }
+

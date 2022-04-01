@@ -1,7 +1,5 @@
 import 'package:example/helpers/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:richflushbar/richbar.dart';
-import 'package:richflushbar/richbar_helper.dart';
 
 void main() {
   runApp(const MyApp());

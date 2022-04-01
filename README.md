@@ -13,10 +13,10 @@ and the Flutter guide for
 
 ## Usage
 
-To use this package add richflushbar as a dependency in your pubspec.yaml and add this import in your file
+To use this package add richbar as a dependency in your pubspec.yaml and add this import in your file
 
 ```
-import 'package:richflushbar/richbar_helper.dart';
+import 'package:richbar/richbar_helper.dart';
 ```
 
 ## Screenshots

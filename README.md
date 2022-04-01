@@ -67,4 +67,4 @@ Richbar(
 
 ## License
 
-Do What The F\*ck You Want To Public License
+MIT License

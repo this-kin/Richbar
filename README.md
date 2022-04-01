@@ -66,5 +66,4 @@ Richbar(
 | onStatusChanged | To listen to the Richbar Status change                                                                                                  |
 
 ## License
-
 MIT License

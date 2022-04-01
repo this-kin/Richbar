@@ -1,6 +1,6 @@
 name: richbar
 description: A flutter package to display message in a sophisticated way
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/ichie2/Richbar
 
 environment:

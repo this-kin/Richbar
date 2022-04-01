@@ -315,7 +315,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
       Timer(const Duration(milliseconds: 200), () {
         _animationController!.reset();
       });
-     _isDismissible = false;
+      _isDismissible = false;
     } else {
       _animationController!.reverse();
     }
@@ -346,14 +346,14 @@ class RichbarRoute<T> extends OverlayRoute<T> {
       _t!.cancel();
     }
   }
+
   bool canTransitionTo(RichbarRoute<dynamic> nextRoute) => true;
   bool canTransitionFrom(RichbarRoute<dynamic> previousRoute) => true;
   @override
   void dispose() {
-     super.dispose();
+    super.dispose();
     _animationController?.dispose();
     completer.complete(_result);
-   
   }
 
   /// A short description of this route useful for debugging.
@@ -369,4 +369,6 @@ RichbarRoute showRichbar<T>(
     richbar: richbar,
     routeSettings: const RouteSettings(name: richbarroute),
   );
+
+  
 }

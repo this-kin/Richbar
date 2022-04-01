@@ -1,5 +1,7 @@
+import 'package:example/helpers/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:richflushbar/richbar.dart';
+import 'package:richflushbar/richbar_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,26 +53,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async {
+  void _incrementCounter() {
     setState(() {
       _counter++;
     });
-    await Richbar(
-      title: "Please enter your password",
-      text: "Dismiss",
-      isDismissible: false,
-      richbarPosition: RichbarPosition.top,
-      duration: const Duration(seconds: 5),
-      onPanDown: (v) {
-        print("Pan Down");
-      },
-      onPressed: () {
-        print("on Pressed");
-      },
-      onStatusChanged: (status) {
-        print(status);
-      },
-    ).show(context);
   }
 
   @override
@@ -118,7 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          richbarWidget("Counter has increment By One $_counter", context);
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

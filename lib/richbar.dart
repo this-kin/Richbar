@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:richflushbar/constants/color_constant.dart';
+import 'package:richflushbar/constants/string_constant.dart';
 import 'package:richflushbar/richbar_route.dart' as routes;
 
 //
@@ -23,6 +24,8 @@ class Richbar<T> extends StatefulWidget {
 
   /// message text size
   final double? titleFontSize;
+
+  final Alignment? titleAlignment;
 
   /// message text weight default will be normal w400
   final FontWeight titleFontWeight;
@@ -103,6 +106,7 @@ class Richbar<T> extends StatefulWidget {
     Key? key,
     this.title,
     this.titleFontSize,
+    this.titleAlignment = Alignment.topLeft,
     this.titleFontWeight = FontWeight.w300,
     this.titleTextColor = defaultTextColor,
     this.text = "Dismiss",
@@ -346,18 +350,23 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                           left: widget.padding.left,
                           right: widget.padding.right,
                         ),
-                        child: Text(
-                          widget.title ?? "",
-                          style: TextStyle(
-                            fontSize: widget.titleFontSize ?? 14.0,
-                            color: widget.titleTextColor ?? Colors.white,
-                            fontWeight: widget.titleFontWeight,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: widget.titleAlignment!,
+                          child: Text(
+                            widget.title ?? "",
+                            style: TextStyle(
+                              fontSize: widget.titleFontSize ?? 14.0,
+                              color: widget.titleTextColor ?? Colors.white,
+                              fontWeight: widget.titleFontWeight,
+                            ),
                           ),
                         ),
                       )
                     : const SizedBox(),
                 Center(
                   child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
                     height: 50,
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.1),
@@ -368,7 +377,14 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                     child: Material(
                       type: MaterialType.transparency,
                       child: InkWell(
-                        onTap: widget.onPressed,
+                        onTap: widget.onPressed ??
+                            () {
+                              if (richbarroute.isEmpty) {
+                                //
+                              } else {
+                                Navigator.pop(context);
+                              }
+                            },
                         borderRadius:
                             widget.borderRadius ?? BorderRadius.circular(50),
                         child: Center(
@@ -376,7 +392,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                             child: Text(
                               widget.text!,
                               style: TextStyle(
-                                fontSize: widget.textFontSize ?? 17,
+                                fontSize: widget.textFontSize ?? 15,
                                 color: widget.actionColor ?? Colors.white,
                                 fontWeight:
                                     widget.textFontWeight ?? FontWeight.bold,

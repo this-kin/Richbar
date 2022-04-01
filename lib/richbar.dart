@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:richflushbar/constants/color_constant.dart';
-import 'package:richflushbar/richbar_route.dart' as routes;
+import 'package:richbar/constants/color_constant.dart';
+import 'package:richbar/richbar_route.dart' as routes;
 
 //
 typedef RichbarStatusCallback = void Function(RichbarStatus? richbarStatus);

@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:richflushbar/constants/string_constant.dart';
-import 'package:richflushbar/richbar.dart';
+import 'package:richbar/constants/string_constant.dart';
+import 'package:richbar/richbar.dart';
 
 class RichbarRoute<T> extends OverlayRoute<T> {
   final Richbar richbar;

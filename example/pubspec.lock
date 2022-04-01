@@ -102,7 +102,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
-  richflushbar:
+  richbar:
     dependency: "direct main"
     description:
       path: ".."

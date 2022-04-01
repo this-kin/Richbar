@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:richflushbar/constants/color_constant.dart';
-import 'package:richflushbar/constants/string_constant.dart';
 import 'package:richflushbar/richbar_route.dart' as routes;
 
 //

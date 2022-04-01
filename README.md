@@ -40,29 +40,31 @@ Richbar(
 
 ## Quick reference
 
-| Property        | What does it do                                       |
-| --------------- | ----------------------------------------------------- |
-| title           | message to be displayed                               |
-| titleTextColor  | message text color to be displayed                    |
-| titleFontSize   | message text font size to be displayed                |
-| titleFontWeight | message text font weight to be displayed              |
-| titleAlignment  | message text Alignment to be displayed                |
-| text            | button text default is "Dismiss"                      |
-| textColor       | button text color to be displayed                     |
-| textFontSize    | button text font size to be displayed                 |
-| backgroundColor | tray background color                                 |
-| duration        | is the length of time this animation should last.     |
-| showCurve       | The curve to use in the forward direction             |
-| dismissCurve    | The curve to use in the forward direction             |
-| showPulse       | To apply a slow down nice effect during the animation |
-| maxWidth        | To set width especially on IPADS                      |
-| margin | Empty space to surround the tray widget |
-| padding | This padding is in addition to any padding inherent in the tray widget |
-| padding | This padding is in addition to any padding inherent in the tray widget |
-| richbarPosition | Specify the entry point of the Tray widget can be [RichbarPosition.top] on top of your screen or [RichbarPosition.bottom] on the bottom|
-| onPanDown | A Callback that fires when user taps the Tray widget |
-| onPressed | A Callback that fires when user taps the Button |
-| isDismissible | Determines if the user can swipe the widget/tray to dismiss. |
-| onStatusChanged | To listen to the Richbar Status change |
+| Property        | What does it do                                                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| title           | message to be displayed                                                                                                                 |
+| titleTextColor  | message text color to be displayed                                                                                                      |
+| titleFontSize   | message text font size to be displayed                                                                                                  |
+| titleFontWeight | message text font weight to be displayed                                                                                                |
+| titleAlignment  | message text Alignment to be displayed                                                                                                  |
+| text            | button text default is "Dismiss"                                                                                                        |
+| textColor       | button text color to be displayed                                                                                                       |
+| textFontSize    | button text font size to be displayed                                                                                                   |
+| backgroundColor | tray background color                                                                                                                   |
+| duration        | is the length of time this animation should last.                                                                                       |
+| showCurve       | The curve to use in the forward direction                                                                                               |
+| dismissCurve    | The curve to use in the forward direction                                                                                               |
+| showPulse       | To apply a slow down nice effect during the animation                                                                                   |
+| maxWidth        | To set width especially on IPADS                                                                                                        |
+| margin          | Empty space to surround the tray widget                                                                                                 |
+| padding         | This padding is in addition to any padding inherent in the tray widget                                                                  |
+| padding         | This padding is in addition to any padding inherent in the tray widget                                                                  |
+| richbarPosition | Specify the entry point of the Tray widget can be [RichbarPosition.top] on top of your screen or [RichbarPosition.bottom] on the bottom |
+| onPanDown       | A Callback that fires when user taps the Tray widget                                                                                    |
+| onPressed       | A Callback that fires when user taps the Button                                                                                         |
+| isDismissible   | Determines if the user can swipe the widget/tray to dismiss.                                                                            |
+| onStatusChanged | To listen to the Richbar Status change                                                                                                  |
 
 ## License
+
+Do What The F\*ck You Want To Public License

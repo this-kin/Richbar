@@ -30,26 +30,27 @@ Simply create a Richbar widget and pass in the required parameters
 
 ```dart
 Richbar(
-      title: title!,
-      text: action,
+      
+      message: message,
       backgroundColor: const Color(0XFF1DA64D),
       duration: const Duration(seconds: 2),
       richbarPosition: RichbarPosition.top,
-    );
+       leading: const Icon(
+        Icons.check_circle_rounded,
+        color: Colors.lightBlueAccent,
+      ),
+    ).show(context);
 ```
 
 ## Quick reference
 
 | Property        | What does it do                                                                                                                         |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| title           | message to be displayed                                                                                                                 |
+| message           | message to be displayed                                                                                                                 |
 | titleTextColor  | message text color to be displayed                                                                                                      |
 | titleFontSize   | message text font size to be displayed                                                                                                  |
 | titleFontWeight | message text font weight to be displayed                                                                                                |
-| titleAlignment  | message text Alignment to be displayed                                                                                                  |
-| text            | button text default is "Dismiss"                                                                                                        |
-| textColor       | button text color to be displayed                                                                                                       |
-| textFontSize    | button text font size to be displayed                                                                                                   |
+| titleAlignment  | message text Alignment to be displayed                                                                                                  |                                                                                            |
 | backgroundColor | tray background color                                                                                                                   |
 | duration        | is the length of time this animation should last.                                                                                       |
 | showCurve       | The curve to use in the forward direction                                                                                               |

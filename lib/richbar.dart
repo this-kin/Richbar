@@ -20,32 +20,22 @@ class Richbar<T> extends StatefulWidget {
   final RichbarStatusCallback? onStatusChanged;
 
   /// message text size
-  final double? titleFontSize;
+  final double? messageSize;
 
   final Alignment? titleAlignment;
 
   final Icon? leading;
 
   /// message text weight default will be normal w400
-  final FontWeight titleFontWeight;
+  final FontWeight? messageFontWeight;
 
   /// message text color default color will be white
-  final Color? titleTextColor;
+  final Color? messageColor;
 
   /// action text to be displayed to the user default text will be dismissed
   final String? message;
 
-  ///
   final Color? blockInteractionColor;
-
-  /// action text size
-  final double? textFontSize;
-
-  /// action text color
-  final Color? textColor;
-
-  /// action text font weight will be bold w700-800
-  final FontWeight? textFontWeight;
 
   /// Widget tray background color default color will be purple
   final Color? backgroundColor;
@@ -103,18 +93,15 @@ class Richbar<T> extends StatefulWidget {
 
   Richbar({
     Key? key,
-    this.titleFontSize,
+    this.messageSize,
     this.leading,
     this.titleAlignment = Alignment.topLeft,
-    this.titleFontWeight = FontWeight.w300,
-    this.titleTextColor = defaultTextColor,
+    this.messageFontWeight = FontWeight.w300,
+    this.messageColor = defaultTextColor,
     this.message,
-    this.textFontSize,
     this.showPulse = true,
-    this.textColor = defaultTextColor,
     this.onPressed,
     this.blockInteractionColor = Colors.transparent,
-    this.textFontWeight,
     this.backgroundColor = defaultBackgroundColor,
     this.actionColor,
     this.onPanDown,
@@ -360,9 +347,9 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                     child: Text(
                       widget.message!,
                       style: TextStyle(
-                        fontSize: widget.textFontSize ?? 15,
+                        fontSize: widget.messageSize ?? 15,
                         color: widget.actionColor ?? Colors.white,
-                        fontWeight: widget.textFontWeight ?? FontWeight.w400,
+                        fontWeight: widget.messageFontWeight ?? FontWeight.w400,
                       ),
                     ),
                   ),

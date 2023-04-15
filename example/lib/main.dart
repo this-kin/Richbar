@@ -1,5 +1,6 @@
 import 'package:example/helpers/helper.dart';
 import 'package:flutter/material.dart';
+import 'package:richbar/richbar_helper.dart';
 
 void main() {
   runApp(const MyApp());
@@ -103,7 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          richbarWidget("Counter has increment By One $_counter", context);
+          RichbarHelper.success(message: 'Counter has incremented by 1');
+          _incrementCounter();
+          // richbarWidget("Counter has increment By One $_counter", context);
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:richbar/constants/color_constant.dart';
+import 'package:richbar/constants/double_constants.dart';
 import 'package:richbar/richbar_route.dart' as routes;
 
 //
@@ -18,13 +19,12 @@ class Richbar<T> extends StatefulWidget {
   /// to listen to richbar events
   final RichbarStatusCallback? onStatusChanged;
 
-  /// The message to be displayed to the user
-  final String? title;
-
   /// message text size
   final double? titleFontSize;
 
   final Alignment? titleAlignment;
+
+  final Widget? leading;
 
   /// message text weight default will be normal w400
   final FontWeight titleFontWeight;
@@ -33,7 +33,7 @@ class Richbar<T> extends StatefulWidget {
   final Color? titleTextColor;
 
   /// action text to be displayed to the user default text will be dismissed
-  final String? text;
+  final String? message;
 
   ///
   final Color? blockInteractionColor;
@@ -103,12 +103,12 @@ class Richbar<T> extends StatefulWidget {
 
   Richbar({
     Key? key,
-    this.title,
     this.titleFontSize,
+    this.leading,
     this.titleAlignment = Alignment.topLeft,
     this.titleFontWeight = FontWeight.w300,
     this.titleTextColor = defaultTextColor,
-    this.text = "Dismiss",
+    this.message,
     this.textFontSize,
     this.showPulse = true,
     this.textColor = defaultTextColor,
@@ -212,7 +212,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   RichbarStatus? richbarStatus;
   AnimationController? _fadeController;
   late Animation<double> fadeAnimation;
-  late bool _isTitlePresent;
+  late bool _isLeadingPresent;
 
   late Completer<Size> _boxHeightCompleter;
   late GlobalKey? _globalKey;
@@ -221,8 +221,8 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
     super.initState();
     _globalKey = GlobalKey();
     _boxHeightCompleter = Completer<Size>();
-    _isTitlePresent = (widget.title != null);
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+    _isLeadingPresent = (widget.leading == null);
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       getCompleterSize();
     });
     if (widget.showPulse!) {
@@ -322,12 +322,14 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   Widget richbarWidget() {
     return Container(
       key: _globalKey,
-      height: 130,
+      height: height,
       constraints: widget.maxWidth != null
-          ? BoxConstraints(maxWidth: widget.maxWidth!)
+          ? BoxConstraints(maxWidth: widget.maxWidth! - widthPadding)
           : null,
       decoration: BoxDecoration(
         color: widget.backgroundColor,
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.all(color: widget.backgroundColor!),
       ),
       padding: widget.padding,
       alignment: Alignment.center,
@@ -337,11 +339,11 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
         children: [
           Expanded(
             flex: 1,
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                _isTitlePresent
+                _isLeadingPresent
                     ? Padding(
                         padding: EdgeInsets.only(
                           top: widget.padding.top,
@@ -352,61 +354,23 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: widget.titleAlignment!,
-                          child: Text(
-                            widget.title ?? "",
-                            style: TextStyle(
-                              fontSize: widget.titleFontSize ?? 14.0,
-                              color: widget.titleTextColor ?? Colors.white,
-                              fontWeight: widget.titleFontWeight,
-                            ),
-                          ),
+                          child: widget.leading,
                         ),
                       )
                     : const SizedBox(),
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius:
-                          widget.borderRadius ?? BorderRadius.circular(50),
-                    ),
-                    alignment: Alignment.center,
-                    child: Material(
-                      type: MaterialType.transparency,
-                      child: InkWell(
-                        onTap: widget.onPressed ??
-                            () {
-                              if (widget.richbarRoute!.isActive) {
-                                //
-                                Navigator.pop(context);
-                              } else {
-                                //
-                              }
-                            },
-                        borderRadius:
-                            widget.borderRadius ?? BorderRadius.circular(50),
-                        child: Center(
-                          child: FittedBox(
-                            child: Text(
-                              widget.text!,
-                              style: TextStyle(
-                                fontSize: widget.textFontSize ?? 15,
-                                color: widget.actionColor ?? Colors.white,
-                                fontWeight:
-                                    widget.textFontWeight ?? FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                FittedBox(
+                  child: Text(
+                    widget.message!,
+                    style: TextStyle(
+                      fontSize: widget.textFontSize ?? 15,
+                      color: widget.actionColor ?? Colors.white,
+                      fontWeight: widget.textFontWeight ?? FontWeight.bold,
                     ),
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -415,6 +379,9 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
 
 ///
 enum RichbarPosition { top, bottom }
+
 enum RichbarDimissibleDirection { vertical, horizontal }
+
 enum RicharStyle { grounded, floating }
+
 enum RichbarStatus { showing, init, dismissed, hidden }

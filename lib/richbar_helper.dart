@@ -1,38 +1,44 @@
-import 'package:richbar/constants/image_constant.dart';
 import 'package:richbar/richbar.dart';
 import 'package:flutter/material.dart';
-import 'package:richbar/widgets/custom_icon_widget.dart';
 
 class RichbarHelper {
+  RichbarHelper._();
+
   static const _kDuration = Duration(seconds: 2);
 
-  static Richbar success({String? message}) {
+  static success({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
       backgroundColor: const Color(0xff00ACEE),
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
-      leading: const CustomIcon(icon: ConstanceImage.check),
-    );
+      leading: const Icon(
+        Icons.check_circle_rounded,
+        color: Colors.lightBlueAccent,
+      ),
+    ).show(context);
   }
 
-  static Richbar error({String? message}) {
+  static error({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
       backgroundColor: const Color(0xffFF0000),
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
-      leading: const CustomIcon(icon: ConstanceImage.cancel),
-    );
+      leading: const Icon(
+        Icons.cancel_rounded,
+        color: Colors.red,
+      ),
+    ).show(context);
   }
 
-  static Richbar information({String? message}) {
+  static information({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
       backgroundColor: const Color(0xff00ACEE),
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
       // leading: const CustomIcon(icon: ConstanceImage.cancel),
-    );
+    ).show(context);
   }
 }

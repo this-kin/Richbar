@@ -24,7 +24,7 @@ class Richbar<T> extends StatefulWidget {
 
   final Alignment? titleAlignment;
 
-  final Widget? leading;
+  final Icon? leading;
 
   /// message text weight default will be normal w400
   final FontWeight titleFontWeight;
@@ -221,7 +221,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
     super.initState();
     _globalKey = GlobalKey();
     _boxHeightCompleter = Completer<Size>();
-    _isLeadingPresent = (widget.leading == null);
+    _isLeadingPresent = widget.leading!.size == null;
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       getCompleterSize();
     });
@@ -320,58 +320,57 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
   }
 
   Widget richbarWidget() {
-    return Container(
-      key: _globalKey,
-      height: height,
-      constraints: widget.maxWidth != null
-          ? BoxConstraints(maxWidth: widget.maxWidth! - widthPadding)
-          : null,
-      decoration: BoxDecoration(
-        color: widget.backgroundColor,
-        borderRadius: BorderRadius.circular(borderRadius),
-        border: Border.all(color: widget.backgroundColor!),
-      ),
-      padding: widget.padding,
-      alignment: Alignment.center,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _isLeadingPresent
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                          top: widget.padding.top,
-                          bottom: widget.padding.bottom,
-                          left: widget.padding.left,
-                          right: widget.padding.right,
-                        ),
-                        child: FittedBox(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Container(
+        key: _globalKey,
+        height: height,
+        constraints: widget.maxWidth != null
+            ? BoxConstraints(maxWidth: widget.maxWidth! - widthPadding)
+            : null,
+        decoration: BoxDecoration(
+          color: widget.backgroundColor!.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(color: widget.backgroundColor!),
+        ),
+        padding: widget.padding,
+        alignment: Alignment.center,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _isLeadingPresent
+                      ? FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: widget.titleAlignment!,
                           child: widget.leading,
-                        ),
-                      )
-                    : const SizedBox(),
-                FittedBox(
-                  child: Text(
-                    widget.message!,
-                    style: TextStyle(
-                      fontSize: widget.textFontSize ?? 15,
-                      color: widget.actionColor ?? Colors.white,
-                      fontWeight: widget.textFontWeight ?? FontWeight.bold,
+                        )
+                      : const SizedBox(),
+                  _isLeadingPresent
+                      ? const SizedBox(width: widthSpacing)
+                      : const SizedBox(),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      widget.message!,
+                      style: TextStyle(
+                        fontSize: widget.textFontSize ?? 15,
+                        color: widget.actionColor ?? Colors.white,
+                        fontWeight: widget.textFontWeight ?? FontWeight.w400,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

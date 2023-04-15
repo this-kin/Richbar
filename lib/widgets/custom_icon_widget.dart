@@ -15,6 +15,8 @@ class CustomIcon extends StatelessWidget {
       child: SvgPicture.asset(
         icon!,
         fit: BoxFit.scaleDown,
+        height: 15,
+        width: 15,
       ),
     );
   }

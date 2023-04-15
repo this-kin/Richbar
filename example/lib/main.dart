@@ -65,6 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _decrementCounter() {
+    setState(() {
+      _counter--;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -106,22 +112,43 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            const SizedBox(height: 160),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      _decrementCounter();
+                      RichbarHelper.error(
+                        context: context,
+                        message: 'Counter has decrement by 1: $_counter',
+                      );
+                    },
+                    tooltip: 'Increment',
+                    icon: const Icon(Icons.minimize),
+                  ),
+                  IconButton(
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      _incrementCounter();
+                      RichbarHelper.success(
+                        context: context,
+                        message: 'Counter has incremented by 1: $_counter',
+                      );
+                    },
+                    tooltip: 'Increment',
+                    icon: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          RichbarHelper.success(
-            context: context,
-            message: 'Counter has incremented by 1',
-          );
-
-          _incrementCounter();
-          // richbarWidget("Counter has increment By One $_counter", context);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

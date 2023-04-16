@@ -1,6 +1,6 @@
 name: richbar
 description: A highly customizable, animated and easy to use in-app notification library for Flutter that allows you to show notifications in different styles and animations.
-version: 0.0.3
+version: 1.0.0
 homepage: https://github.com/ichie2/Richbar
 
 environment:

@@ -15,14 +15,16 @@ and the Flutter guide for
 
 To use this package add richbar as a dependency in your pubspec.yaml and add this import in your file
 
-```
-import 'package:richbar/richbar_helper.dart';
+```dart
+import 'package:richbar/richbar.dart';
 ```
 
 ## Screenshots
 
-![Andriod Shot](screenshots/ss1.png)
-![GIF Shot](screenshots/ss2.gif)
+ | Andriod Shot | GIF Shot|
+|------|-------|
+|<img src="screenshots/ss1.png" width="400">|<img src="screenshots/ss2.gif" width="400">|
+
 
 ## How to use
 
@@ -44,22 +46,21 @@ Richbar(
 
 ## Quick reference
 
-| Property        | What does it do                                                                                                                         |
+| Property        |  Purpose                                                                                                   |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| message           | message to be displayed                                                                                                                 |
-| titleTextColor  | message text color to be displayed                                                                                                      |
+| message           | message to be displayed                                                                                                             |
+| messageColor  | message text color to be displayed                                                                                                      |
 | titleFontSize   | message text font size to be displayed                                                                                                  |
-| titleFontWeight | message text font weight to be displayed                                                                                                |
-| titleAlignment  | message text Alignment to be displayed                                                                                                  |                                                                                            |
-| backgroundColor | tray background color                                                                                                                   |
-| duration        | is the length of time this animation should last.                                                                                       |
+| messageFontWeight | message text font weight to be displayed                                                                                                |
+| messageAlignment  | message text alignment whether  LEFT or Right, TOP or BOTTOM                                                                                |                                                                                            |
+| backgroundColor | message tray background color                                                                                                                   |
+| duration        | duration of how long animation should last                                                                            |
 | showCurve       | The curve to use in the forward direction                                                                                               |
 | dismissCurve    | The curve to use in the forward direction                                                                                               |
 | showPulse       | To apply a slow down nice effect during the animation                                                                                   |
 | maxWidth        | To set width especially on IPADS                                                                                                        |
 | margin          | Empty space to surround the tray widget                                                                                                 |
-| padding         | This padding is in addition to any padding inherent in the tray widget                                                                  |
-| padding         | This padding is in addition to any padding inherent in the tray widget                                                                  |
+| padding         | This padding is in addition to any padding inherent in the tray widget                                                                                                             |
 | richbarPosition | Specify the entry point of the Tray widget can be [RichbarPosition.top] on top of your screen or [RichbarPosition.bottom] on the bottom |
 | onPanDown       | A Callback that fires when user taps the Tray widget                                                                                    |
 | onPressed       | A Callback that fires when user taps the Button                                                                                         |

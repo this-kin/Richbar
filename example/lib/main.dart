@@ -21,19 +21,10 @@ class MyApp extends StatelessWidget {
     );
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData.dark(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-
-          ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Colors.white,
+      ),
+      home: const MyHomePage(title: ''),
     );
   }
 }
@@ -81,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
@@ -105,6 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(height: 150),
             const Text(
               'You have pushed the button this many times:',
             ),
@@ -118,29 +111,37 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  IconButton(
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      _decrementCounter();
-                      RichbarHelper.error(
-                        context: context,
-                        message: 'Counter has decrement by 1: $_counter',
-                      );
-                    },
-                    tooltip: 'Increment',
-                    icon: const Icon(Icons.minimize),
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.greenAccent,
+                    child: IconButton(
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        _decrementCounter();
+                        RichbarHelper.error(
+                          context: context,
+                          message: 'Counter has decrement by 1: $_counter',
+                        );
+                      },
+                      tooltip: 'Increment',
+                      icon: const Icon(Icons.minimize),
+                    ),
                   ),
-                  IconButton(
-                    color: Theme.of(context).primaryColor,
-                    onPressed: () {
-                      _incrementCounter();
-                      RichbarHelper.success(
-                        context: context,
-                        message: 'Counter has incremented by 1: $_counter',
-                      );
-                    },
-                    tooltip: 'Increment',
-                    icon: const Icon(Icons.add),
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Colors.greenAccent,
+                    child: IconButton(
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        _incrementCounter();
+                        RichbarHelper.success(
+                          context: context,
+                          message: 'Counter has incremented by 1: $_counter',
+                        );
+                      },
+                      tooltip: 'Increment',
+                      icon: const Icon(Icons.add),
+                    ),
                   ),
                 ],
               ),

@@ -22,7 +22,7 @@ class Richbar<T> extends StatefulWidget {
   /// message text size
   final double? messageSize;
 
-  final Alignment? titleAlignment;
+  final TextAlign? messageAlignment;
 
   final Icon? leading;
 
@@ -95,8 +95,8 @@ class Richbar<T> extends StatefulWidget {
     Key? key,
     this.messageSize,
     this.leading,
-    this.titleAlignment = Alignment.topLeft,
-    this.messageFontWeight = FontWeight.w300,
+    this.messageAlignment = TextAlign.left,
+    this.messageFontWeight = FontWeight.w500,
     this.messageColor = defaultTextColor,
     this.message,
     this.showPulse = true,
@@ -335,7 +335,6 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                   _isLeadingPresent
                       ? FittedBox(
                           fit: BoxFit.scaleDown,
-                          alignment: widget.titleAlignment!,
                           child: widget.leading,
                         )
                       : const SizedBox(),
@@ -346,8 +345,9 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                     fit: BoxFit.scaleDown,
                     child: Text(
                       widget.message!,
+                      textAlign: widget.messageAlignment,
                       style: TextStyle(
-                        fontSize: widget.messageSize ?? 15,
+                        fontSize: widget.messageSize ?? 16,
                         color: widget.actionColor ?? Colors.white,
                         fontWeight: widget.messageFontWeight ?? FontWeight.w400,
                       ),

@@ -240,11 +240,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
         .animate(
       CurvedAnimation(
         parent: _animationController!,
-        curve: const Interval(
-          0.0,
-          0.35,
-          curve: Curves.easeInOutCirc,
-        ),
+        curve: const Interval(0.0, 0.35, curve: Curves.easeInOutCirc),
       ),
     );
   }

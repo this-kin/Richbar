@@ -1,7 +1,7 @@
 library richbar;
 
-import 'dart:async';
 import 'dart:ui';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:richbar/constants/color_constant.dart';
@@ -368,7 +368,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
             ? BoxConstraints(maxWidth: widget.maxWidth! - widthPadding)
             : null,
         decoration: BoxDecoration(
-          color: widget.backgroundColor!.withOpacity(0.2),
+          color: widget.backgroundColor!.withOpacity(widget.backgroundOpaque),
           borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(color: widget.backgroundColor!),
         ),
@@ -396,6 +396,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                   Expanded(
                     child: Text(
                       widget.text!,
+                      maxLines: 5,
                       textAlign: widget.textAlignment,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

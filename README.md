@@ -61,7 +61,7 @@ Richbar(
 
 | Property        |  Purpose                                                                                                   |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| text           | The text to be displayed.   | textSize   | The size to use when painting the text.                                                                                                          |
+| text           | The text to be displayed.   | textSize   | The size to use when painting the text.                                                |
 | textColor  | The color to use when painting the text.                                                |
 | textSize   | The size to use when painting the text.                                                                                           |
 | textFontWeight | The typeface thickness to use when painting the text (e.g., bold, FontWeight.w100).                                                                                              |

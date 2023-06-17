@@ -1,15 +1,17 @@
-import 'package:richbar/richbar.dart';
 import 'package:flutter/material.dart';
+import 'package:richbar/constants/color_constant.dart';
+import 'package:richbar/constants/enum_constant.dart';
+import 'package:richbar/widgets/richbar_widget.dart';
 
 class RichbarHelper {
   RichbarHelper._();
 
   static const _kDuration = Duration(seconds: 2);
 
-  static success({String? message, required BuildContext context}) {
+  static showSuccess({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
-      backgroundColor: const Color(0xff00ACEE),
+      backgroundColor: kBlueColor,
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
       leading: const Icon(
@@ -19,10 +21,10 @@ class RichbarHelper {
     ).show(context);
   }
 
-  static error({String? message, required BuildContext context}) {
+  static showError({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
-      backgroundColor: const Color(0xffFF0000),
+      backgroundColor: kRedColor,
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
       leading: const Icon(
@@ -32,13 +34,12 @@ class RichbarHelper {
     ).show(context);
   }
 
-  static information({String? message, required BuildContext context}) {
+  static showMessage({String? message, required BuildContext context}) {
     return Richbar(
       message: message,
-      backgroundColor: const Color(0xff00ACEE),
+      backgroundColor: kBlueColor,
       duration: _kDuration,
       richbarPosition: RichbarPosition.top,
-      // leading: const CustomIcon(icon: ConstanceImage.cancel),
     ).show(context);
   }
 }

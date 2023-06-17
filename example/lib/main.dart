@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:richbar/richbar_helper.dart';
+import 'package:richbar/richbar.dart';
 
 void main() {
   runApp(const MyApp());

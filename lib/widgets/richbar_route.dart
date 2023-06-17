@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:richbar/constants/enum_constant.dart';
 import 'package:richbar/constants/string_constant.dart';
-import 'package:richbar/richbar.dart';
+import 'package:richbar/widgets/richbar_widget.dart';
 import 'package:richbar/typedefs/richbar_typedef.dart';
 
 class RichbarRoute<T> extends OverlayRoute<T> {

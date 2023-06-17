@@ -8,11 +8,11 @@ class RichbarHelper {
 
   static const _kDuration = Duration(seconds: 2);
 
-  static showSuccess({String? message, required BuildContext context}) {
+  static showSuccess({message, required BuildContext context}) {
     return Richbar(
-      message: message,
-      backgroundColor: kBlueColor,
+      message,
       duration: _kDuration,
+      backgroundColor: kBlueColor,
       richbarPosition: RichbarPosition.top,
       leading: const Icon(
         Icons.check_circle_rounded,
@@ -21,24 +21,24 @@ class RichbarHelper {
     ).show(context);
   }
 
-  static showError({String? message, required BuildContext context}) {
+  static showError({message, required BuildContext context}) {
     return Richbar(
-      message: message,
-      backgroundColor: kRedColor,
+      message,
       duration: _kDuration,
+      backgroundColor: kRedColor,
       richbarPosition: RichbarPosition.top,
       leading: const Icon(
         Icons.cancel_rounded,
-        color: Colors.red,
+        color: kRedColor,
       ),
     ).show(context);
   }
 
-  static showMessage({String? message, required BuildContext context}) {
+  static showMessage({message, required BuildContext context}) {
     return Richbar(
-      message: message,
-      backgroundColor: kBlueColor,
+      message,
       duration: _kDuration,
+      backgroundColor: kBlueColor,
       richbarPosition: RichbarPosition.top,
     ).show(context);
   }

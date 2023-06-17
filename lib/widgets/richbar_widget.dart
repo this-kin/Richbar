@@ -21,9 +21,10 @@ class Richbar<T> extends StatefulWidget {
   ///Typically an [Icon] or a [SvgPicture] widget.
   final Icon? leading;
 
-  /// An opacity of 1.0 is fully opaque.
+  /// With an opacity of 1.0, background is fully opaque.
   ///
-  /// An opacity of 0.0 is fully transparent (i.e., invisible).
+  /// With an opacity of 0.0, background is fully transparent (i.e., invisible).
+  /// Default will be set to [kOpaque] or [0.5] slightly see through
   final double backgroundOpaque;
 
   /// Configures how an [AnimationController] behaves when animation starts.
@@ -79,7 +80,7 @@ class Richbar<T> extends StatefulWidget {
   final Color? backgroundColor;
 
   /// Called when the user taps this Richbar widget
-  final VoidCallback? onPressed;
+  final OnTap? onPressed;
 
   /// How the text should be aligned horizontally
   ///
@@ -124,7 +125,7 @@ class Richbar<T> extends StatefulWidget {
   final RichbarPosition richbarPosition;
 
   /// Calls listener every time the status of the richbar changes.
-  RichbarStatusCallback? _onStatusChanged;
+  RichbarStatusCallback? onStatusChanged;
 
   ///  Defines whether the Richbar widget can be swiped horizontally or vertically
   ///
@@ -166,13 +167,17 @@ class Richbar<T> extends StatefulWidget {
     this.dismissableDirection = DismissableDirection.horizontal,
     RichbarStatusCallback? onStatusChanged,
     this.richbarRoute,
-  })  : _onStatusChanged = onStatusChanged,
+  })  : onStatusChanged = onStatusChanged,
         super(key: key) {
-    this._onStatusChanged = onStatusChanged ?? (status) {};
+    this.onStatusChanged = onStatusChanged ?? (status) {};
   }
 
   routes.RichbarRoute<T?>? richbarRoute;
 
+  /// Displays a Richbar widget above the current contents of the app,
+  /// With Material entrance and exit animations
+  ///
+  /// Modal barrier behavior (Richbar is dismissible with a slide horizontally or vertically depending on the [dismissableDirection]).
   Future<T?> show(BuildContext context) async {
     richbarRoute = routes.showRichbar<T>(
       context: context,
@@ -182,7 +187,10 @@ class Richbar<T> extends StatefulWidget {
         .push(richbarRoute as Route<T>);
   }
 
-  Future<T?> dismiss([T? result]) async {
+  /// Closes the Richbar widget above the current contents of the app,
+  /// With Material entrance and exit animations
+  ///
+  Future<T?> close([T? result]) async {
     // If route was never initialized, do nothing
     if (richbarRoute == null) {
       return null;

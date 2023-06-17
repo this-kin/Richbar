@@ -75,7 +75,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
           builder: (BuildContext context) {
             return Listener(
               onPointerDown:
-                  richbar.isDismissible! ? (_) => richbar.dismiss() : null,
+                  richbar.isDismissible! ? (_) => richbar.close() : null,
               child: _bgOverlay(),
             );
           },
@@ -164,8 +164,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
   Widget dimissible(Widget child) {
     return Dismissible(
       key: Key(customKey.toString()),
-      direction: richbar.richbarDimissibleDirection ==
-              RichbarDimissibleDirection.horizontal
+      direction: richbar.dismissableDirection == DismissDirection.horizontal
           ? DismissDirection.horizontal
           : DismissDirection.vertical,
       resizeDuration: null,
@@ -220,8 +219,8 @@ class RichbarRoute<T> extends OverlayRoute<T> {
 
   Animation<double>? createBlurFilterAnimation() {
     // ignore: unnecessary_null_comparison
-    if (richbar.blur == null) return null;
-    return Tween(begin: 0.0, end: richbar.blur).animate(
+    if (richbar.backgroundOpaque == null) return null;
+    return Tween(begin: 0.0, end: richbar.backgroundOpaque).animate(
       CurvedAnimation(
         parent: _animationController!,
         curve: const Interval(
@@ -235,7 +234,7 @@ class RichbarRoute<T> extends OverlayRoute<T> {
 
   Animation<Color?>? createColorFilterAnimation() {
     // ignore: unnecessary_null_comparison
-    if (richbar.blur == null) return null;
+    if (richbar.backgroundOpaque == null) return null;
     return ColorTween(
             begin: Colors.transparent, end: richbar.blockInteractionColor)
         .animate(

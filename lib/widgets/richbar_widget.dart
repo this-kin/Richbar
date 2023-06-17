@@ -116,7 +116,7 @@ class Richbar<T> extends StatefulWidget {
 
   /// If non-null, the corners of this box are rounded by this [BorderRadius].
   ///
-  /// Applies only to boxes with rectangular shapes; ignored if [shape] is not [BoxShape.rectangle]
+  /// Applies only to Richbar with rectangular shapes; ignored if [shape] is not [BoxShape.rectangle]
   final BorderRadius? borderRadius;
 
   ///
@@ -172,10 +172,9 @@ class Richbar<T> extends StatefulWidget {
     this.enableBackgroundInteraction = false,
     this.richbarPosition = RichbarPosition.top,
     this.dismissableDirection = DismissableDirection.horizontal,
-    RichbarStatusCallback? onStatusChanged,
+    this.onStatusChanged,
     this.richbarRoute,
-  })  : onStatusChanged = onStatusChanged,
-        super(key: key) {
+  }) : super(key: key) {
     this.onStatusChanged = onStatusChanged ?? (status) {};
   }
 

@@ -61,8 +61,8 @@ Richbar(
 
 | Property        |  Purpose                                                                                                   |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| text           | The text to be displayed.                                                                                                    |
-| textColor  | The color to use when painting the text.                                                                                           |
+| text           | The text to be displayed.   | textSize   | The size to use when painting the text.                                                                                                          |
+| textColor  | The color to use when painting the text.                                                |
 | textSize   | The size to use when painting the text.                                                                                           |
 | textFontWeight | The typeface thickness to use when painting the text (e.g., bold, FontWeight.w100).                                                                                              |
 | textAlignment  | How the text should be aligned horizontally                                                                             |                                                                                            |
@@ -73,15 +73,14 @@ Richbar(
 | showPulse       | Configures how an [AnimationController] behaves when animation starts.                                                                     |
 | maxWidth        | Defines the width of the [Richbar] especially on big screens     Like iPads, macOs, Windows,Linux and Web                                                                                  |
 | margin          | Empty space to surround the [Border] and [content].                                                                                  |
-| padding         | An immutable set of offsets in each of the four cardinal directions.     
-
-| richbarStyle |    Defines the z-coordinate at which to place this Richbar relative to its parent.|   
+| padding         | An immutable set of offsets in each of the four cardinal directions.
+| richbarStyle    |    Defines the z-coordinate at which to place this Richbar relative to its parent.
 | borderRadius |   Applies only to Richbar with rectangular shapes; ignored if [shape] is not [BoxShape.rectangle] |                                   |
 | richbarPosition |  Defines the entry position of the Richbar widget either top or bottom |                                                       |
 | onPressed       | Called when the user taps this Richbar widget                                                                                 |
 | isDismissible   | Defines whether the Richbar widget can be swiped horizontally or vertically                                                                        |
 | onStatusChanged |    Calls listener every time the status of the richbar changes.                                                                                  |
-| dismissableDirection |   Defines whether the Richbar widget can be swiped horizontally or vertically                                                                  |
+| dismissableDirection |   Defines whether the Richbar widget can be swiped horizontally or vertically             
 
 | enableBackgroundInteraction |   Defines if user can interact with screen when Richbar is been displayed on screen                                                               |
 

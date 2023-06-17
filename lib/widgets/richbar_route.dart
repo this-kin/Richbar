@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:richbar/constants/enum_constant.dart';
 import 'package:richbar/constants/string_constant.dart';
 import 'package:richbar/richbar.dart';
+import 'package:richbar/typedefs/richbar_typedef.dart';
 
 class RichbarRoute<T> extends OverlayRoute<T> {
   final Richbar richbar;
@@ -24,8 +26,8 @@ class RichbarRoute<T> extends OverlayRoute<T> {
     RouteSettings? routeSettings,
   })  : builder = Builder(builder: (BuildContext context) {
           return GestureDetector(
-            onTap: richbar.onPanDown != null
-                ? () => richbar.onPanDown!(richbar)
+            onTap: richbar.onPressed != null
+                ? () => richbar.onPressed!(richbar)
                 : null,
             child: richbar,
           );
@@ -368,6 +370,4 @@ RichbarRoute showRichbar<T>(
     richbar: richbar,
     routeSettings: const RouteSettings(name: richbarroute),
   );
-
-  
 }

@@ -21,6 +21,12 @@ class Richbar<T> extends StatefulWidget {
   ///Typically an [Icon] or a [SvgPicture] widget.
   final Icon? leading;
 
+  /// With an opacity of 1.0, Richbar is fully opaque.
+  ///
+  /// With an opacity of 0.0, Richbar is fully transparent (i.e., invisible).
+  /// Default will be set to [kOpaque] or [0.5] slightly see through
+  final double opacity;
+
   /// With an opacity of 1.0, background is fully opaque.
   ///
   /// With an opacity of 0.0, background is fully transparent (i.e., invisible).
@@ -144,6 +150,7 @@ class Richbar<T> extends StatefulWidget {
     String this.text, {
     Key? key,
     this.leading,
+    this.opacity = 0.5,
     this.maxWidth,
     this.onPressed,
     this.borderRadius,
@@ -368,7 +375,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
             ? BoxConstraints(maxWidth: widget.maxWidth! - widthPadding)
             : null,
         decoration: BoxDecoration(
-          color: widget.backgroundColor!.withOpacity(widget.backgroundOpaque),
+          color: widget.backgroundColor!.withOpacity(widget.opacity),
           borderRadius: BorderRadius.circular(borderRadius),
           border: Border.all(color: widget.backgroundColor!),
         ),

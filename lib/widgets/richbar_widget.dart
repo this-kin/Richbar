@@ -21,46 +21,61 @@ class Richbar<T> extends StatefulWidget {
   ///Typically an [Icon] or a [SvgPicture] widget.
   final Icon? leading;
 
+  /// An opacity of 1.0 is fully opaque.
+  ///
+  /// An opacity of 0.0 is fully transparent (i.e., invisible).
+  final double backgroundOpaque;
+
   /// Configures how an [AnimationController] behaves when animation starts.
   ///
   /// When [showPulse] is true, the device is asking Flutter to reduce or disable animations as much as possible.
   /// To honor this, we reduce the duration and the corresponding number of frames for animations.
+  /// Default will be set to true
   final bool? showPulse;
 
-  /// Curve animation applied when show() is called Curves.easeIn will be default
+  /// Curve animation applied when [Richbar.show()] is called
+  ///
+  /// Default curve will be set to [Curves.bounceInOut]
   final Curve showCurve;
+
+  /// Curve animation applied when [Richbar.dismiss(context)] is called
+  ///
+  /// Default curve will be set to [Curves.bounceOut]
+  final Curve dismissCurve;
 
   /// Defines the width of the [Richbar] especially on big screens
   ///
-  /// like iPads, macOs, Windows,Linux and Web
+  /// Like iPads, macOs, Windows,Linux and Web
   final double? maxWidth;
 
   /// The size to use when painting the text.
   ///
-  ///  default size will be to [16]
+  /// Default size will be to [kfontSize] or [16.0]
   final double? textSize;
 
   /// The length of time this animation should last.
+  ///
+  /// Default will be set to [kDuration] or [1 seconds]
   final Duration? duration;
 
   // final OnTap? onPanDown;
 
   /// The color to use when painting the text
   ///
-  /// default color will be set to [Colors.white] or [kTextColor]
+  /// Default color will be set to [Colors.white] or [kTextColor]
   final Color? textColor;
 
   /// Empty space to surround the [Border] and [content].
   final EdgeInsetsGeometry? margin;
 
-  /// Defines whether the Richbar widget can be swiped
+  /// Defines whether the Richbar widget can be swiped horizontally or vertically
   ///
-  /// when swiped [left] or [right] the Richbar widget dismisses
+  /// When set to [true] the Richbar widget dismisses when swiped
   final bool? isDismissible;
 
   /// Defines the background color of Richbar widget
   ///
-  /// default color will be set to [defaultBackgroundColor]
+  /// Default color will be set to [Colors.purple] or[kBackgroundColor]
   final Color? backgroundColor;
 
   /// Called when the user taps this Richbar widget
@@ -68,12 +83,12 @@ class Richbar<T> extends StatefulWidget {
 
   /// How the text should be aligned horizontally
   ///
-  /// default alignment will be set to [TextAlign.left], right after your leading widget
+  /// Default alignment will be set to [TextAlign.left], after your leading widget
   final TextAlign? textAlignment;
 
   /// The typeface thickness to use when painting the text (e.g., bold, FontWeight.w100).
   ///
-  /// default fontWeight will be set to [FontWeight.normal]
+  /// Default fontWeight will be set to [FontWeight.normal]
   final FontWeight? textFontWeight;
 
   /// An immutable set of offsets in each of the four cardinal directions.
@@ -83,74 +98,77 @@ class Richbar<T> extends StatefulWidget {
   /// right, and bottom. These values are not affected by the [TextDirection].
   /// To support both left-to-right and right-to-left layouts, consider using [EdgeInsetsDirectional],
   /// which is expressed in terms of start, top, end, and bottom, where start and end are resolved in terms
-  ///  of a [TextDirection] (typically obtained from the ambient [Directionality]).
+  /// of a [TextDirection] (typically obtained from the ambient [Directionality]).
   final EdgeInsetsGeometry? padding;
 
   /// Defines the z-coordinate at which to place this Richbar relative to its parent.
   ///
   /// Richbar can be [RichbarStyle.floating] or be [RichbarStyle.grounded] to the edge of the screen.
+  /// Default will be set to [RichbarStyle.floating]
   final RichbarStyle richbarStyle;
 
   /// If non-null, the corners of this box are rounded by this [BorderRadius].
-
-  /// Applies only to boxes with rectangular shapes; ignored if
-  /// [shape] is not [BoxShape.rectangle]
+  ///
+  /// Applies only to boxes with rectangular shapes; ignored if [shape] is not [BoxShape.rectangle]
   final BorderRadius? borderRadius;
 
-  // final Color? blockInteractionColor;
+  ///
+  ///
+  /// Default will be set to [Colors.transparent] or [kTransparentColor]
 
+  final Color? blockInteractionColor;
+
+  /// Defines the entry position of the Richbar widget either top or bottom
+  ///
   /// Richbar can be set on [RichbarPosition.top] or [RichbarPosition.bottom]
   final RichbarPosition richbarPosition;
 
-  ///
   /// Calls listener every time the status of the richbar changes.
-  final RichbarStatusCallback? onStatusChanged;
+  RichbarStatusCallback? _onStatusChanged;
 
-  /// dismiss direction horizontal swipe or vertical
-  final RichbarDimissibleDirection richbarDimissibleDirection;
+  ///  Defines whether the Richbar widget can be swiped horizontally or vertically
+  ///
+  /// When set to [DismissableDirection.horizontal] the Richbar widget can be dismissed
+  /// When wiped on from Left or Right, When set to [DismissableDirection.vertical].
+  /// The Richbar widget can be swiped on from Top to Bottom
+  final DismissableDirection? dismissableDirection;
 
-  /// Curve animation applied when dismiss() is called Curves.easeIn will be default
-  final Curve dismissCurve;
-
-  /// action button blur 0.4 will be default
-  final double blur;
-
-  /// whether user can interact with screen when bar is displaying
+  /// Defines if user can interact with screen when Richbar is been displayed
+  /// on screen
+  ///
+  /// Default value will be set to false
   final bool enableBackgroundInteraction;
 
-  Richbar({
+  Richbar(
+    String this.text, {
     Key? key,
-    this.messageSize,
     this.leading,
-    this.messageAlignment = TextAlign.left,
-    this.messageFontWeight = FontWeight.w500,
-    this.messageColor = defaultTextColor,
-    this.message,
-    this.showPulse = true,
-    this.onPressed,
-    this.blockInteractionColor = Colors.transparent,
-    this.backgroundColor = defaultBackgroundColor,
-    this.actionColor,
-    this.onPanDown,
-    this.duration,
-    this.isDismissible = false,
     this.maxWidth,
-    this.margin = const EdgeInsets.symmetric(),
-    this.padding = const EdgeInsets.all(15),
+    this.onPressed,
     this.borderRadius,
-    this.richbarPosition = RichbarPosition.top,
-    this.richbarDimissibleDirection = RichbarDimissibleDirection.vertical,
-    this.richbarStyle = RicharStyle.floating,
-    this.showCurve = Curves.easeOutCirc,
-    this.dismissCurve = Curves.easeOutCirc,
-    this.blur = 0.5,
+    this.showPulse = true,
+    this.textSize = kfontSize,
+    this.duration = kDuration,
+    this.textColor = kTextColor,
+    this.isDismissible = false,
+    this.backgroundOpaque = 0.5,
+    this.showCurve = Curves.bounceInOut,
+    this.dismissCurve = Curves.bounceOut,
+    this.textAlignment = TextAlign.left,
+    this.backgroundColor = kBackgroundColor,
+    this.textFontWeight = FontWeight.normal,
+    this.blockInteractionColor = kTransparentColor,
+    this.margin = const EdgeInsets.symmetric(),
+    this.padding = const EdgeInsets.all(8),
+    this.richbarStyle = RichbarStyle.floating,
     this.enableBackgroundInteraction = false,
+    this.richbarPosition = RichbarPosition.top,
+    this.dismissableDirection = DismissableDirection.horizontal,
     RichbarStatusCallback? onStatusChanged,
     this.richbarRoute,
-    // ignore: prefer_initializing_formals
-  })  : onStatusChanged = onStatusChanged,
+  })  : _onStatusChanged = onStatusChanged,
         super(key: key) {
-    onStatusChanged = onStatusChanged ?? (status) {};
+    this._onStatusChanged = onStatusChanged ?? (status) {};
   }
 
   routes.RichbarRoute<T?>? richbarRoute;
@@ -280,24 +298,23 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
 
   @override
   Widget build(BuildContext context) {
-    final mediaquery = MediaQuery.of(context).viewInsets;
+    final alignment = widget.richbarPosition == RichbarPosition.top
+        ? Alignment.topCenter
+        : Alignment.bottomCenter;
+    final mediaQuery = MediaQuery.of(context).viewInsets;
     return Align(
-      alignment: widget.richbarPosition == RichbarPosition.top
-          ? Alignment.topCenter
-          : Alignment.bottomCenter,
+      alignment: alignment,
       heightFactor: 1.0,
       child: Material(
-        color: widget.richbarStyle == RicharStyle.floating
+        color: widget.richbarStyle == RichbarStyle.floating
             ? Colors.transparent
             : widget.backgroundColor,
         child: SafeArea(
           minimum: widget.richbarPosition == RichbarPosition.bottom
-              ? EdgeInsets.only(bottom: mediaquery.bottom)
-              : EdgeInsets.only(top: mediaquery.top),
+              ? EdgeInsets.only(bottom: mediaQuery.bottom)
+              : EdgeInsets.only(top: mediaQuery.top),
           bottom: widget.richbarPosition == RichbarPosition.bottom,
           top: true,
-          left: false,
-          right: false,
           child: _getRichar(),
         ),
       ),
@@ -314,8 +331,8 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
             return snapshot.hasData
                 ? BackdropFilter(
                     filter: ImageFilter.blur(
-                      sigmaX: widget.blur,
-                      sigmaY: widget.blur,
+                      sigmaX: widget.backgroundOpaque,
+                      sigmaY: widget.backgroundOpaque,
                     ),
                     child: Container(
                       height: snapshot.data!.height,
@@ -370,13 +387,13 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                       : const SizedBox(),
                   Expanded(
                     child: Text(
-                      widget.message!,
-                      textAlign: widget.messageAlignment,
+                      widget.text!,
+                      textAlign: widget.textAlignment,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: widget.messageSize ?? 16,
-                        color: widget.actionColor ?? Colors.white,
-                        fontWeight: widget.messageFontWeight ?? FontWeight.w400,
+                        color: widget.textColor,
+                        fontSize: widget.textSize,
+                        fontWeight: widget.textFontWeight,
                       ),
                     ),
                   ),

@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
                         _decrementCounter();
-                        RichbarHelper.error(
+                        RichbarHelper.showError(
                           context: context,
                           message: 'Counter has decrement by 1: $_counter',
                         );
@@ -134,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Theme.of(context).primaryColor,
                       onPressed: () {
                         _incrementCounter();
-                        RichbarHelper.success(
+                        RichbarHelper.showSuccess(
                           context: context,
                           message: 'Counter has incremented by 1: $_counter',
                         );

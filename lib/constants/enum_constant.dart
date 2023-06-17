@@ -1,6 +1,6 @@
 enum RichbarPosition { top, bottom }
 
-enum RichbarDimissibleDirection { vertical, horizontal }
+enum DismissableDirection { vertical, horizontal }
 
 enum RichbarStyle { grounded, floating }
 

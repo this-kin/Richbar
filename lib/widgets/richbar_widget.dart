@@ -42,12 +42,12 @@ class Richbar<T> extends StatefulWidget {
 
   /// Curve animation applied when [Richbar.show()] is called
   ///
-  /// Default curve will be set to [Curves.bounceInOut]
+  /// Default curve will be set to [Curves.easeIn]
   final Curve showCurve;
 
   /// Curve animation applied when [Richbar.dismiss(context)] is called
   ///
-  /// Default curve will be set to [Curves.bounceOut]
+  /// Default curve will be set to [Curves.easeOut]
   final Curve dismissCurve;
 
   /// Defines the width of the [Richbar] especially on big screens
@@ -62,7 +62,7 @@ class Richbar<T> extends StatefulWidget {
 
   /// The length of time this animation should last.
   ///
-  /// Default will be set to [kDuration] or [1 seconds]
+  /// Default will be set to [kDuration] or [2 seconds]
   final Duration? duration;
 
   // final OnTap? onPanDown;
@@ -160,8 +160,8 @@ class Richbar<T> extends StatefulWidget {
     this.textColor = kTextColor,
     this.isDismissible = false,
     this.backgroundOpaque = 0.5,
-    this.showCurve = Curves.bounceInOut,
-    this.dismissCurve = Curves.bounceOut,
+    this.showCurve = Curves.easeIn,
+    this.dismissCurve = Curves.easeInOut,
     this.textAlignment = TextAlign.left,
     this.backgroundColor = kBackgroundColor,
     this.textFontWeight = FontWeight.normal,
@@ -402,7 +402,7 @@ class _RichbarState<K extends Object?> extends State<Richbar<K>>
                   Expanded(
                     child: Text(
                       widget.text!,
-                      maxLines: 5,
+                      maxLines: 8,
                       textAlign: widget.textAlignment,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

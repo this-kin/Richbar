@@ -3,5 +3,5 @@ const widthPadding = 40.0;
 const widthSpacing = 10.0;
 const borderRadius = 10.0;
 const kfontSize = 16.0;
-const kDuration = Duration(seconds: 1);
+const kDuration = Duration(seconds: 2);
 const kOpaque = 0.5;

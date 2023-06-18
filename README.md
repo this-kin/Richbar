@@ -23,12 +23,12 @@ import 'package:richbar/richbar.dart';
 
  | 1 | 2|
 |------|-------|
-|<img src="screenshots/screenshot_1.png" width="400">|<img src="screenshots/screenshot_2.png" width="400">|
+|<img src="https://raw.githubusercontent.com/kin-devv/Richbar/main/screenshots/screenshot_2.png" width="400">|<img src="https://raw.githubusercontent.com/kin-devv/Richbar/main/screenshots/screenshot_1.png" width="400">|
 
 
  | GIF Shot | 
 |------|
-|<img src="screenshots/screenshot_3.gif" width="400">|
+|<img src="https://github.com/kin-devv/Richbar/blob/main/screenshots/screenshot_3.gif?raw=true" width="400">|
 
 
 ## How to use

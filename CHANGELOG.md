@@ -21,5 +21,8 @@
 * Fixed typo error for enum Richar to Richbar
 * Improved documentation for easy readablity
 
+## 1.0.2
+* Update README
+
 
 
